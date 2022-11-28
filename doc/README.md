@@ -10,12 +10,10 @@ namespace watermark
 }
 ```
 
-The easiest freestanding function ?
+The easiest freestanding function
 
 ```cpp
-void watermark(input_img, mark, out_path, position, size);
+void add_watermark(input_path, watermark_path, output_path, position, size);
 ```
 
-Maybe OOP?
-
-TBD
+C++ API to avoid unsafe conversions, read of null-terminated strings, etc.

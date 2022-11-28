@@ -1,17 +1,19 @@
+# Copyright (c) 2022, Piotr Staniszewski
+
 set(TARGET_NAME proto)
 
 set(CMAKE_CXX_STANDARD 20)
 
 find_package(OpenCV REQUIRED)
 
-file(GLOB SOURCES ${PROJECT_DIR}/*.cpp)
+file(GLOB SOURCES ./*.cpp)
 
 add_executable(${TARGET_NAME} ${SOURCES})
 
 target_include_directories(
     ${TARGET_NAME}
     PUBLIC
-    ${PROJECT_DIR}
+    .
     ${OpenCV_INCLUDE_DIRS}
 )
 

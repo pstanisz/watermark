@@ -13,7 +13,7 @@ int main()
 
     std::cout << "prototype\n";
 
-    const std::string image_path = "../data/test_img_1.png";
+    const std::string image_path = "../tools/proto/data/test_img_1.png";
     Mat img = imread(image_path, IMREAD_COLOR);
 
     if (img.empty())
@@ -24,7 +24,7 @@ int main()
 
     auto img_size = img.size();
 
-    const std::string logo_path = "../data/test_logo_1.png";
+    const std::string logo_path = "../tools/proto/data/test_logo_1.png";
     Mat logo = imread(logo_path, IMREAD_COLOR);
 
     if (logo.empty())
