@@ -1,18 +1,21 @@
 # Copyright (c) 2022, Piotr Staniszewski
 
-set(TARGET_NAME ${PROJECT_NAME}_demo)
+set(TARGET_NAME ${PROJECT_NAME})
 
-file(GLOB SOURCES ./*.cpp)
+find_package(OpenCV REQUIRED)
 
-add_executable(
+file(GLOB SOURCES ${SRC_DIR}/*.cpp)
+
+add_library(
     ${TARGET_NAME}
+    SHARED
     ${SOURCES})
 
 target_include_directories(
     ${TARGET_NAME}
     PUBLIC
     ${INC_DIR}
-)
+    ${OpenCV_INCLUDE_DIRS})
 
 target_compile_options(
     ${TARGET_NAME}
@@ -26,5 +29,4 @@ target_compile_features(
 
 target_link_libraries(
     ${TARGET_NAME}
-    PRIVATE
-    ${PROJECT_NAME})
+    ${OpenCV_LIBS})
