@@ -5,6 +5,10 @@
 
 namespace watermark
 {
+    class Image
+    {
+    };
+
     struct Position
     {
         size_t m_x;

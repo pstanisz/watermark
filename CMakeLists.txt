@@ -33,5 +33,8 @@ target_compile_options(${TARGET_NAME} PUBLIC -Wall -Wextra -Wshadow -Wnon-virtua
 target_compile_features(${TARGET_NAME} PUBLIC cxx_std_20)
 target_link_libraries(${TARGET_NAME} ${OpenCV_LIBS})
 
+enable_testing()
+
+add_subdirectory(tests)
 add_subdirectory(tools/demo)
 add_subdirectory(tools/proto)
