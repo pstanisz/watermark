@@ -1,30 +1,16 @@
 // Copyright (c) 2022, Piotr Staniszewski
+#pragma once
 
-#include <cstdlib>
+#include <common.h>
+#include <image.h>
+
 #include <string>
 
 namespace watermark
 {
-    class Image
-    {
-    };
-
-    struct Position
-    {
-        size_t m_x;
-        size_t m_y;
-    };
-
-    struct Size
-    {
-        size_t m_width;
-        size_t m_height;
-    };
-
-    void add_watermark(
-        const std::string &input_path,
-        const std::string &watermark_path,
-        const std::string &output_path,
+    Image add_watermark(
+        const Image &input_img,
+        const Image &watermark_img,
         const Position &position,
         const Size &size);
 

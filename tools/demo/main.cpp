@@ -10,7 +10,10 @@ int main()
 
     using namespace watermark;
 
-    add_watermark("input", "watermark", "output", Position{0U, 0U}, Size{10U, 10U});
+    Image input{""};
+    Image watermark{""};
+
+    auto output = add_watermark(input, watermark, Position{0U, 0U}, Size{10U, 10U});
 
     return EXIT_SUCCESS;
 }

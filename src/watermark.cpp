@@ -7,14 +7,15 @@
 namespace watermark
 {
 
-    void add_watermark(
-        [[maybe_unused]]const std::string &input_path,
-        [[maybe_unused]]const std::string &watermark_path,
-        [[maybe_unused]]const std::string &output_path,
-        [[maybe_unused]]const Position &position,
-        [[maybe_unused]]const Size &size)
+    Image add_watermark(
+        [[maybe_unused]] const Image &input_img,
+        [[maybe_unused]] const Image &watermark_img,
+        [[maybe_unused]] const Position &position,
+        [[maybe_unused]] const Size &size)
     {
         std::cout << "TBD\n";
+
+        return Image("");
     }
 
 }
