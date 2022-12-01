@@ -2,9 +2,25 @@
 
 #include <gtest/gtest.h>
 
-TEST(Image_test, test_one)
+#include <image.h>
+#include <exception.h>
+
+TEST(Image_test, test_empty_filepath)
 {
-    ASSERT_EQ(1, 1);
+    using namespace watermark;
+
+    ASSERT_THROW({
+        Image img{""};
+    }, Image_exception);
+}
+
+TEST(Image_test, test_non_existing_filepath)
+{
+    using namespace watermark;
+
+    ASSERT_THROW({
+        Image img{"non_existing"};
+    }, Image_exception);
 }
 
 int main(int argc, char** argv)

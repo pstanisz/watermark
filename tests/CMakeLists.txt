@@ -21,11 +21,19 @@ target_link_libraries(
 
 set(TARGET_NAME ${PROJECT_NAME}_tests)
 
-file(GLOB SOURCES ./*.cpp)
+file(GLOB SOURCES ./*.cpp ${SRC_DIR}/*.cpp)
 
 add_executable(
     ${TARGET_NAME}
-    ${SOURCES})
+    ${SOURCES}
+    )
+
+target_include_directories(
+    ${TARGET_NAME}
+    PRIVATE
+    ${INC_DIR}
+    mocks
+)
 
 target_compile_options(
     ${TARGET_NAME}
