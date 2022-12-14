@@ -13,7 +13,7 @@ namespace watermark
     class Image::Image_impl
     {
     public:
-        Image_impl(const std::string &img_path);
+        explicit Image_impl(const std::string &img_path);
 
         inline Size size() const noexcept
         {

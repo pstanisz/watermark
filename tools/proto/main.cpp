@@ -23,6 +23,7 @@ int main()
     }
 
     auto img_size = img.size();
+    std::cout << "Loaded image size: " << img_size.width << " x " << img_size.height << "\n";
 
     const std::string logo_path = "../tools/proto/data/test_logo_1.png";
     Mat logo = imread(logo_path, IMREAD_COLOR);

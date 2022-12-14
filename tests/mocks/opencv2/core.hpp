@@ -1,6 +1,8 @@
 // Copyright (c) 2022, Piotr Staniszewski
 #pragma once
 
+#include <gtest/gtest.h>
+
 namespace cv
 {
     enum ImreadModes
