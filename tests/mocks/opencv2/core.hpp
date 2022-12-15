@@ -12,11 +12,8 @@ namespace cv
 
     struct Mat
     {
-        bool empty() const noexcept { return true; }
+        bool empty() const noexcept;
     };
 
-    Mat imread([[maybe_unused]] const std::string &filename, [[maybe_unused]] int flags)
-    {
-        return Mat();
-    }
+    Mat imread([[maybe_unused]] const std::string &filename, [[maybe_unused]] int flags);
 }

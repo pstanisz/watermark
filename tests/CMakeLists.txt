@@ -21,7 +21,7 @@ target_link_libraries(
 
 set(TARGET_NAME ${PROJECT_NAME}_tests)
 
-file(GLOB SOURCES ./*.cpp ${SRC_DIR}/*.cpp)
+file(GLOB SOURCES ./*.cpp ${SRC_DIR}/*.cpp ./mocks/opencv2/*.cpp)
 
 add_executable(
     ${TARGET_NAME}

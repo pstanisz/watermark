@@ -7,6 +7,8 @@
 
 namespace watermark
 {
+    class Image_impl;
+
     class Image
     {
     public:
@@ -16,7 +18,6 @@ namespace watermark
         Size size() const noexcept;
 
     private:
-        class Image_impl;
         Image_impl *m_impl;
     };
 }
