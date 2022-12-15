@@ -13,7 +13,7 @@ namespace watermark
 
     struct Size
     {
-        size_t m_width;
-        size_t m_height;
+        int m_width;
+        int m_height;
     };
 }

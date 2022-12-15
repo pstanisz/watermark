@@ -4,6 +4,8 @@
 
 #include "image_impl.h"
 
+#include <cassert>
+
 namespace watermark
 {
 
@@ -17,6 +19,8 @@ namespace watermark
 
     Size Image_impl::size() const noexcept
     {
-        return Size{10U, 10U};
+        assert(!m_matrix.empty());
+
+        return Size{m_matrix.size().width, m_matrix.size().height};
     }
 }
