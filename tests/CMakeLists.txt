@@ -9,19 +9,26 @@ FetchContent_Declare(
 )
 
 FetchContent_MakeAvailable(googletest)
+
 add_library(
-    GTest::GTest 
+    GTest::GTest
     INTERFACE 
     IMPORTED)
 
 target_link_libraries(
     GTest::GTest
     INTERFACE
-    gtest_main)
+    gmock_main)
 
 set(TARGET_NAME ${PROJECT_NAME}_tests)
 
-file(GLOB SOURCES ./*.cpp ${SRC_DIR}/*.cpp ./mocks/opencv2/*.cpp)
+file(
+    GLOB 
+    SOURCES
+    ./*.cpp
+    ${SRC_DIR}/*.cpp
+    ./mocks/opencv2/*.cpp
+    )
 
 add_executable(
     ${TARGET_NAME}

@@ -2,6 +2,7 @@
 #pragma once
 
 #include <gtest/gtest.h>
+#include <gmock/gmock.h>
 
 namespace cv
 {
@@ -18,9 +19,12 @@ namespace cv
 
     struct Mat
     {
-        bool empty() const noexcept;
-        Size size() const;
+        bool empty() const noexcept { return m_empty; }
+        Size size() const { return m_size; }
+
+        bool m_empty;
+        Size m_size;
     };
 
-    Mat imread([[maybe_unused]] const std::string &filename, [[maybe_unused]] int flags);
+    Mat imread(const std::string &filename, int flags);
 }

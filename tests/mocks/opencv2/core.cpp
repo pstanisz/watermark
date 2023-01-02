@@ -2,14 +2,12 @@
 
 #include "core.hpp"
 
+#include "../cv_mock.h"
+
 namespace cv
 {
-
-    bool Mat::empty() const noexcept { return true; }
-    Size Mat::size() const { return Size{10, 10}; }
-
-    Mat imread([[maybe_unused]] const std::string &filename, [[maybe_unused]] int flags)
+    Mat imread(const std::string &filename, int flags)
     {
-        return Mat();
+        return watermark::mock::g_imread_mock->imread(filename, flags);
     }
 }
