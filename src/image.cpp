@@ -14,7 +14,7 @@ namespace watermark
     {
     }
 
-    Image::~Image()
+    Image::~Image() noexcept
     {
         if (m_impl)
         {

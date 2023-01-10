@@ -6,6 +6,9 @@
 
 namespace watermark
 {
+    /**
+     * Base exception type of watermark.
+     */
     class Exception : public std::exception
     {
     public:
@@ -17,6 +20,9 @@ namespace watermark
         std::string m_msg;
     };
 
+    /**
+     * Represents any exception related to Image loading and processing.
+     */
     class Image_exception : public Exception
     {
     public:
