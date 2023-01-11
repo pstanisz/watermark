@@ -34,7 +34,7 @@ namespace test
         }
     };
 
-    TEST_F(Image_test, test_empty)
+    TEST_F(Image_test, test_create_empty)
     {
         using namespace watermark;
 
@@ -49,7 +49,7 @@ namespace test
         ASSERT_THROW({ Image img{""}; }, Image_exception);
     }
 
-    TEST_F(Image_test, test_non_empty)
+    TEST_F(Image_test, test_create_non_empty)
     {
         using namespace watermark;
 
@@ -62,6 +62,44 @@ namespace test
             .WillOnce(Return(non_empty_mat));
 
         ASSERT_NO_THROW({ Image img{""}; });
+    }
+
+    TEST_F(Image_test, test_check_size)
+    {
+        using namespace watermark;
+
+        cv::Mat mat{
+            false,
+            cv::Size{10, 10}};
+
+        EXPECT_CALL(*watermark::mock::g_imread_mock, imread(_, _))
+            .Times(1)
+            .WillOnce(Return(mat));
+
+        Image img{""};
+
+        auto expected = Size{10, 10};
+        EXPECT_EQ(expected, img.size());
+    }
+
+    TEST_F(Image_test, test_resize)
+    {
+        using namespace watermark;
+
+        cv::Mat mat{
+            false,
+            cv::Size{10, 10}};
+
+        EXPECT_CALL(*watermark::mock::g_imread_mock, imread(_, _))
+            .Times(1)
+            .WillOnce(Return(mat));
+
+        Image img{""};
+
+        auto new_size = Size{15, 15};
+        img.resize(new_size);
+        
+        EXPECT_EQ(new_size, img.size());
     }
 
     int main(int argc, char **argv)

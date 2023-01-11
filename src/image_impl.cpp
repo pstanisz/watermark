@@ -1,6 +1,7 @@
 // Copyright (c) 2022, Piotr Staniszewski
 
 #include <opencv2/imgcodecs.hpp>
+#include <opencv2/imgproc.hpp>
 
 #include "image_impl.h"
 
@@ -22,5 +23,12 @@ namespace watermark
         assert(!m_matrix.empty());
 
         return Size{m_matrix.size().width, m_matrix.size().height};
+    }
+
+    void Image_impl::resize(const Size& new_size)
+    {
+        assert(!m_matrix.empty());
+
+        cv::resize(m_matrix, m_matrix, {new_size.m_width, new_size.m_height}, 0.0, 0.0, cv::INTER_AREA);
     }
 }

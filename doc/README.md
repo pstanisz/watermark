@@ -25,3 +25,5 @@ auto logo = Image{"/path/to/image.png"};
 ```
 
 Non-copyable, move-only, pImpl pattern, lightweight (no plan to use inheritance).
+
+After a while... UT of opencv wrappers make no bigger sense...

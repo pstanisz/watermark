@@ -25,6 +25,7 @@ namespace watermark
         Image &operator=(Image &&) noexcept = delete;
 
         Size size() const noexcept;
+        void resize(const Size& new_size);
 
     private:
         Image_impl *m_impl;
