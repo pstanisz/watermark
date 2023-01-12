@@ -1,9 +1,6 @@
 // Copyright (c) 2022, Piotr Staniszewski
 #pragma once
 
-#include <gtest/gtest.h>
-#include <gmock/gmock.h>
-
 namespace cv
 {
     enum ImreadModes
@@ -25,6 +22,4 @@ namespace cv
         bool m_empty;
         Size m_size;
     };
-
-    Mat imread(const std::string &filename, int flags);
 }

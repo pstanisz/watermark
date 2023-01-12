@@ -2,6 +2,7 @@
 
 #include "core.hpp"
 #include "imgproc.hpp"
+#include "imgcodecs.hpp"
 
 #include "../cv_mock.h"
 
@@ -12,12 +13,17 @@ namespace cv
         return watermark::mock::g_imread_mock->imread(filename, flags);
     }
 
-    void resize(const Mat &src,
+    bool imwrite(const std::string &filename, const Mat &)
+    {
+        return true;
+    }
+
+    void resize([[maybe_unused]] const Mat &src,
                 Mat &dst,
                 Size dsize,
-                double fx,
-                double fy,
-                int interpolation)
+                [[maybe_unused]] double fx,
+                [[maybe_unused]] double fy,
+                [[maybe_unused]] int interpolation)
     {
         dst.m_size = dsize;
     }

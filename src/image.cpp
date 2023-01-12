@@ -30,10 +30,17 @@ namespace watermark
         return m_impl->size();
     }
 
-    void Image::resize(const Size& new_size)
+    void Image::resize(const Size &new_size)
     {
         assert(m_impl != nullptr);
 
         return m_impl->resize(new_size);
+    }
+
+    void Image::save(const std::string &img_path)
+    {
+        assert(m_impl != nullptr);
+
+        return m_impl->save(img_path);
     }
 }

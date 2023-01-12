@@ -12,8 +12,8 @@ namespace cv
         INTER_AREA = 3
     };
 
-    void resize(const Mat& src,
-                Mat& dst,
+    void resize(const Mat &src,
+                Mat &dst,
                 Size dsize,
                 double fx = 0,
                 double fy = 0,

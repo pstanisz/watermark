@@ -17,7 +17,9 @@ namespace watermark
         ~Image_impl() noexcept = default;
 
         Size size() const noexcept;
-        void resize(const Size& new_size);
+        void resize(const Size &new_size);
+
+        void save(const std::string &img_path);
 
     private:
         cv::Mat m_matrix;

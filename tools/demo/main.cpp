@@ -13,10 +13,10 @@ int main()
 
     try
     {
-        Image input{""};
-        Image watermark{""};
+        Image input{"../tools/proto/data/test_img_1.png"};
 
-        auto output = add_watermark(input, watermark, Position{0U, 0U}, Size{10U, 10U});
+        input.resize(watermark::Size(100, 100));
+        input.save("test_img_1_small.png");
     }
     catch (const Exception &ex)
     {

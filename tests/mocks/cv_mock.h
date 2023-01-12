@@ -1,7 +1,10 @@
 // Copyright (c) 2022, Piotr Staniszewski
 #pragma once
 
-#include "opencv2/core.hpp"
+#include "opencv2/imgcodecs.hpp"
+
+#include <gtest/gtest.h>
+#include <gmock/gmock.h>
 
 namespace watermark
 {

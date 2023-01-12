@@ -27,6 +27,8 @@ namespace watermark
         Size size() const noexcept;
         void resize(const Size& new_size);
 
+        void save(const std::string &img_path);
+
     private:
         Image_impl *m_impl;
     };

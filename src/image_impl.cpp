@@ -25,10 +25,17 @@ namespace watermark
         return Size{m_matrix.size().width, m_matrix.size().height};
     }
 
-    void Image_impl::resize(const Size& new_size)
+    void Image_impl::resize(const Size &new_size)
     {
         assert(!m_matrix.empty());
 
         cv::resize(m_matrix, m_matrix, {new_size.m_width, new_size.m_height}, 0.0, 0.0, cv::INTER_AREA);
+    }
+
+    void Image_impl::save(const std::string &img_path)
+    {
+        assert(!m_matrix.empty());
+
+        cv::imwrite(img_path, m_matrix);
     }
 }
