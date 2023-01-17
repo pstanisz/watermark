@@ -4,6 +4,8 @@
 
 #include <iostream>
 
+#include <opencv2/core/mat.hpp>
+
 namespace watermark
 {
 
@@ -13,7 +15,9 @@ namespace watermark
         [[maybe_unused]] const Position &position,
         [[maybe_unused]] const Size &size)
     {
-        std::cout << "TBD\n";
+        [[maybe_unused]]cv::Mat watermark = cv::Mat::zeros(input_img.size().m_height, input_img.size().m_width, CV_8UC3);
+
+        //TODO
 
         return Image("");
     }

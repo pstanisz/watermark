@@ -1,6 +1,5 @@
 // Copyright (c) 2022, Piotr Staniszewski
 
-#include "core.hpp"
 #include "imgproc.hpp"
 #include "imgcodecs.hpp"
 

@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include "core.hpp"
+#include "core/mat.hpp"
 
 #include <string>
 
