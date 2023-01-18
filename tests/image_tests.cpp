@@ -49,7 +49,7 @@ namespace test
         ASSERT_THROW({ Image img{""}; }, Image_exception);
     }
 
-    TEST_F(Image_test, test_create_non_empty)
+    TEST_F(Image_test, test_create_from_file)
     {
         using namespace watermark;
 
@@ -61,7 +61,18 @@ namespace test
             .Times(1)
             .WillOnce(Return(non_empty_mat));
 
-        ASSERT_NO_THROW({ Image img{""}; });
+        ASSERT_NO_THROW({
+            Image img{""};
+        });
+    }
+
+    TEST_F(Image_test, test_create_from_size)
+    {
+        using namespace watermark;
+
+        ASSERT_NO_THROW({
+            Image img{Size(10, 10)};
+        });
     }
 
     TEST_F(Image_test, test_check_size)
@@ -98,7 +109,7 @@ namespace test
 
         auto new_size = Size{15, 15};
         img.resize(new_size);
-        
+
         EXPECT_EQ(new_size, img.size());
     }
 

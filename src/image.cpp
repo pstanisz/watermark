@@ -14,6 +14,10 @@ namespace watermark
     {
     }
 
+    Image::Image(const Size &img_size) : m_impl{new Image_impl(img_size)}
+    {
+        }
+
     Image::~Image() noexcept
     {
         if (m_impl)

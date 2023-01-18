@@ -14,6 +14,7 @@ namespace watermark
     {
     public:
         explicit Image_impl(const std::string &img_path);
+        explicit Image_impl(const Size &img_size);
         ~Image_impl() noexcept = default;
 
         Size size() const noexcept;

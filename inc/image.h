@@ -16,6 +16,7 @@ namespace watermark
     {
     public:
         explicit Image(const std::string &img_path);
+        explicit Image(const Size &img_size);
         ~Image() noexcept;
 
         Image(const Image &) noexcept = delete;

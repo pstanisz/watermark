@@ -15,7 +15,7 @@ namespace watermark
         [[maybe_unused]] const Position &position,
         [[maybe_unused]] const Size &size)
     {
-        [[maybe_unused]]cv::Mat watermark = cv::Mat::zeros(input_img.size().m_height, input_img.size().m_width, CV_8UC3);
+        Image working{input_img.size()};
 
         //TODO
 

@@ -18,6 +18,10 @@ namespace watermark
         }
     }
 
+    Image_impl::Image_impl(const Size &img_size) : m_matrix{cv::Mat::zeros(img_size.m_height, img_size.m_width, CV_8UC3)}
+    {
+    }
+
     Size Image_impl::size() const noexcept
     {
         assert(!m_matrix.empty());
