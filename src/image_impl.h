@@ -22,6 +22,8 @@ namespace watermark
 
         void save(const std::string &img_path);
 
+        cv::Mat &internal();
+
     private:
         cv::Mat m_matrix;
     };

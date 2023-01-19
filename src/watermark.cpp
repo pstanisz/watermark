@@ -9,6 +9,14 @@
 namespace watermark
 {
 
+    Watermark::Watermark(Image &&watermark_img) : m_image{std::move(watermark_img)}
+    {
+    }
+
+    Watermark::~Watermark() noexcept
+    {
+    }
+
     Image add_watermark(
         [[maybe_unused]] const Image &input_img,
         [[maybe_unused]] const Image &watermark_img,
@@ -17,7 +25,7 @@ namespace watermark
     {
         Image working{input_img.size()};
 
-        //TODO
+        // TODO
 
         return Image("");
     }

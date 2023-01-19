@@ -42,4 +42,11 @@ namespace watermark
 
         cv::imwrite(img_path, m_matrix);
     }
+
+    cv::Mat &Image_impl::internal()
+    {
+        assert(!m_matrix.empty());
+        
+        return m_matrix;
+    }
 }

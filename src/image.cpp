@@ -6,6 +6,7 @@
 #include <cassert>
 
 #include "image_impl.h"
+#include "watermark.h"
 
 namespace watermark
 {
@@ -16,7 +17,7 @@ namespace watermark
 
     Image::Image(const Size &img_size) : m_impl{new Image_impl(img_size)}
     {
-        }
+    }
 
     Image::~Image() noexcept
     {
@@ -25,6 +26,19 @@ namespace watermark
             delete m_impl;
             m_impl = nullptr;
         }
+    }
+
+    Image::Image(Image &&other) noexcept : m_impl{std::move(other.m_impl)}
+    {
+        other.m_impl = nullptr;
+    }
+
+    Image &Image::operator=(Image &&other) noexcept
+    {
+        m_impl = std::move(other.m_impl);
+        other.m_impl = nullptr;
+
+        return *this;
     }
 
     Size Image::size() const noexcept
@@ -46,5 +60,13 @@ namespace watermark
         assert(m_impl != nullptr);
 
         return m_impl->save(img_path);
+    }
+
+    //TODO
+    bool Image::apply([[maybe_unused]]Watermark &mark)
+    {
+        //TODO
+
+        return true;
     }
 }
