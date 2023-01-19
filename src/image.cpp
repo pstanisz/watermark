@@ -62,11 +62,13 @@ namespace watermark
         return m_impl->save(img_path);
     }
 
-    //TODO
-    bool Image::apply([[maybe_unused]]Watermark &mark)
+    // TODO
+    bool Image::apply([[maybe_unused]] Watermark &mark)
     {
-        //TODO
+        assert(m_impl != nullptr);
+        assert(mark.image().m_impl != nullptr);
 
-        return true;
+        // TODO
+        return mark.foo(*m_impl, *mark.image().m_impl);
     }
 }

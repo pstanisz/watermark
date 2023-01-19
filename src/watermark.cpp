@@ -2,19 +2,35 @@
 
 #include <watermark.h>
 
-#include <iostream>
+#include "watermark_impl.h"
 
-#include <opencv2/core/mat.hpp>
+#include <cassert>
 
 namespace watermark
 {
 
-    Watermark::Watermark(Image &&watermark_img) : m_image{std::move(watermark_img)}
+    Watermark::Watermark(Image &&watermark_img) : m_impl{new Watermark_impl(std::move(watermark_img))}
     {
     }
 
     Watermark::~Watermark() noexcept
     {
+    }
+
+    Image &Watermark::image()
+    {
+        assert(m_impl != nullptr);
+
+        return m_impl->image();
+    }
+
+    bool Watermark::foo([[maybe_unused]]Image_impl& img, [[maybe_unused]]Image_impl& mark)
+    {
+        assert(m_impl != nullptr);
+
+        //TODO: whatever needed with img internals
+
+        return true;
     }
 
     Image add_watermark(

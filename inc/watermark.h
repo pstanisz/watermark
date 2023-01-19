@@ -8,14 +8,20 @@
 
 namespace watermark
 {
+    class Watermark_impl;
+
     class Watermark
     {
     public:
         explicit Watermark(Image &&watermark_img);
         ~Watermark() noexcept;
 
+        Image& image();
+
+        bool foo(Image_impl& img, Image_impl& mark);
+
     private:
-        Image m_image;
+        Watermark_impl *m_impl;
     };
 
     Image add_watermark(
