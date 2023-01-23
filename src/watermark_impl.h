@@ -1,12 +1,13 @@
 // Copyright (c) 2023, Piotr Staniszewski
 #pragma once
 
-#include "image.h"
-
 #include <string>
 
 namespace watermark
 {
+    class Image;
+    class Image_impl;
+
     class Watermark_impl
     {
     public:
@@ -14,6 +15,8 @@ namespace watermark
         ~Watermark_impl() noexcept = default;
 
         Image &image();
+
+        bool foo(Image_impl& img, Image_impl& mark);
 
     private:
         Image m_image;

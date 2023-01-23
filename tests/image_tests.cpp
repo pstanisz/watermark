@@ -40,7 +40,8 @@ namespace test
 
         cv::Mat empty_mat{
             true,
-            cv::Size{0, 0}};
+            0,
+            0};
 
         EXPECT_CALL(*watermark::mock::g_imread_mock, imread(_, _))
             .Times(1)
@@ -55,7 +56,8 @@ namespace test
 
         cv::Mat non_empty_mat{
             false,
-            cv::Size{10, 10}};
+            10,
+            10};
 
         EXPECT_CALL(*watermark::mock::g_imread_mock, imread(_, _))
             .Times(1)
@@ -81,7 +83,8 @@ namespace test
 
         cv::Mat mat{
             false,
-            cv::Size{10, 10}};
+            10,
+            10};
 
         EXPECT_CALL(*watermark::mock::g_imread_mock, imread(_, _))
             .Times(1)
@@ -99,7 +102,8 @@ namespace test
 
         cv::Mat mat{
             false,
-            cv::Size{10, 10}};
+            10,
+            10};
 
         EXPECT_CALL(*watermark::mock::g_imread_mock, imread(_, _))
             .Times(1)

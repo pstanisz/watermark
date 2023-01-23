@@ -13,10 +13,15 @@ int main()
 
     try
     {
-        Image input{"../tools/proto/data/test_img_1.png"};
+        Image img{"../tools/proto/data/test_img_1.png"};
+        Image logo{"../tools/proto/data/test_logo_1.png"};
 
-        input.resize(watermark::Size(100, 100));
-        input.save("test_img_1_small.png");
+        // Check of resize & save
+        // img.resize(watermark::Size(100, 100));
+        // img.save("test_img_1_small.png");
+
+        Watermark mark{std::move(logo)};
+        img.apply(mark);
     }
     catch (const Exception &ex)
     {

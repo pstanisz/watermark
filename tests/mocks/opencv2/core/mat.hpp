@@ -9,10 +9,12 @@ namespace cv
     struct Mat
     {
         bool empty() const noexcept { return m_empty; }
-        Size size() const { return m_size; }
-        static Mat zeros(int rows, int cols, [[maybe_unused]]int type) { return Mat{false, Size{rows, cols}}; }
+        Size size() const { return Size{rows, cols}; }
+        static Mat zeros(int rows, int cols, [[maybe_unused]]int type) { return Mat{false, rows, cols}; }
 
         bool m_empty;
-        Size m_size;
+
+        int rows;
+        int cols;
     };
 }

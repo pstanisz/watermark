@@ -24,6 +24,7 @@ namespace cv
                 [[maybe_unused]] double fy,
                 [[maybe_unused]] int interpolation)
     {
-        dst.m_size = dsize;
+        dst.rows = dsize.height;
+        dst.cols = dsize.width;
     }
 }

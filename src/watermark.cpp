@@ -28,9 +28,7 @@ namespace watermark
     {
         assert(m_impl != nullptr);
 
-        //TODO: whatever needed with img internals
-
-        return true;
+        return m_impl->foo(img, mark);
     }
 
     Image add_watermark(
