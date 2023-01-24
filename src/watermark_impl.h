@@ -16,7 +16,7 @@ namespace watermark
 
         Image &image();
 
-        bool foo(Image_impl& img, Image_impl& mark);
+        Image_impl* foo(Image_impl& img, Image_impl& mark);
 
     private:
         Image m_image;

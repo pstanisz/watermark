@@ -15,6 +15,8 @@ namespace watermark
     public:
         explicit Image_impl(const std::string &img_path);
         explicit Image_impl(const Size &img_size);
+        explicit Image_impl(const cv::Mat &mat);
+
         ~Image_impl() noexcept = default;
 
         Size size() const noexcept;
@@ -23,6 +25,8 @@ namespace watermark
         void save(const std::string &img_path);
 
         cv::Mat &internal();
+
+        void preview();
 
     private:
         cv::Mat m_matrix;

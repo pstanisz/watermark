@@ -5,7 +5,7 @@
 #include "watermark_impl.h"
 #include "image_impl.h"
 
-#include <opencv2/highgui.hpp>
+#include <opencv2/core.hpp>
 
 #include <cassert>
 #include <iostream>
@@ -22,7 +22,7 @@ namespace watermark
         return m_image;
     }
 
-    bool Watermark_impl::foo(Image_impl &img, Image_impl &mark)
+    Image_impl* Watermark_impl::foo(Image_impl &img, Image_impl &mark)
     {
         auto &img_mat = img.internal();
         auto &mark_mat = mark.internal();
@@ -42,11 +42,6 @@ namespace watermark
         cv::Mat out;
         addWeighted(mark_resized, 0.9, img_mat, 1.0, 0.0, out); // blends 2 images
 
-        cv::imshow("Display window", out);
-        cv::waitKey(0);
-
-        cv::destroyAllWindows();
-
-        return true;
+        return new Image_impl{out};
     }
 }

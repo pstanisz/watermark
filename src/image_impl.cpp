@@ -3,6 +3,9 @@
 #include <opencv2/imgcodecs.hpp>
 #include <opencv2/imgproc.hpp>
 
+// To be removed
+#include <opencv2/highgui.hpp>
+
 #include "image_impl.h"
 
 #include <cassert>
@@ -19,6 +22,10 @@ namespace watermark
     }
 
     Image_impl::Image_impl(const Size &img_size) : m_matrix{cv::Mat::zeros(img_size.m_height, img_size.m_width, CV_8UC3)}
+    {
+    }
+
+    Image_impl::Image_impl(const cv::Mat &mat) : m_matrix{mat}
     {
     }
 
@@ -46,7 +53,17 @@ namespace watermark
     cv::Mat &Image_impl::internal()
     {
         assert(!m_matrix.empty());
-        
+
         return m_matrix;
+    }
+
+    void Image_impl::preview()
+    {
+        assert(!m_matrix.empty());
+
+        cv::imshow("Display window", m_matrix);
+        cv::waitKey(0);
+
+        cv::destroyAllWindows();
     }
 }

@@ -31,10 +31,16 @@ namespace watermark
 
         void save(const std::string &img_path);
 
-        //TODO
-        bool apply(Watermark &mark);
+        // TODO
+        Image apply(Watermark &mark);
+
+        // Test purposes
+        void preview();
 
     private:
+        explicit Image(Image_impl *impl);
+
+        friend class Watermark;
         Image_impl *m_impl;
     };
 }

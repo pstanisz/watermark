@@ -16,9 +16,9 @@ namespace watermark
         explicit Watermark(Image &&watermark_img);
         ~Watermark() noexcept;
 
-        Image& image();
+        Image &image();
 
-        bool foo(Image_impl& img, Image_impl& mark);
+        Image foo(Image_impl &img, Image_impl &mark);
 
     private:
         Watermark_impl *m_impl;

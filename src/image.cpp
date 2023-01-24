@@ -19,6 +19,10 @@ namespace watermark
     {
     }
 
+    Image::Image(Image_impl *impl) : m_impl(impl)
+    {
+    }
+
     Image::~Image() noexcept
     {
         if (m_impl)
@@ -63,12 +67,19 @@ namespace watermark
     }
 
     // TODO
-    bool Image::apply([[maybe_unused]] Watermark &mark)
+    Image Image::apply([[maybe_unused]] Watermark &mark)
     {
         assert(m_impl != nullptr);
         assert(mark.image().m_impl != nullptr);
 
         // TODO
         return mark.foo(*m_impl, *mark.image().m_impl);
+    }
+
+    void Image::preview()
+    {
+        assert(m_impl != nullptr);
+
+        m_impl->preview();
     }
 }

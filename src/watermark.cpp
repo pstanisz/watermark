@@ -3,6 +3,7 @@
 #include <watermark.h>
 
 #include "watermark_impl.h"
+#include "image_impl.h"
 
 #include <cassert>
 
@@ -24,11 +25,11 @@ namespace watermark
         return m_impl->image();
     }
 
-    bool Watermark::foo([[maybe_unused]]Image_impl& img, [[maybe_unused]]Image_impl& mark)
+    Image Watermark::foo([[maybe_unused]] Image_impl &img, [[maybe_unused]] Image_impl &mark)
     {
         assert(m_impl != nullptr);
 
-        return m_impl->foo(img, mark);
+        return Image(m_impl->foo(img, mark));
     }
 
     Image add_watermark(
