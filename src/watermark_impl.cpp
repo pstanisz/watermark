@@ -40,7 +40,7 @@ namespace watermark
         std::cout << "mark_resized.cols = " << mark_resized.cols << std::endl;
 
         cv::Mat out;
-        addWeighted(mark_resized, 0.9, img_mat, 1.0, 0.0, out); // blends 2 images
+        addWeighted(mark_resized, 0.8, img_mat, 1.0, 0.0, out); // blends 2 images
 
         return new Image_impl{out};
     }
