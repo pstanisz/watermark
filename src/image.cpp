@@ -66,16 +66,6 @@ namespace watermark
         return m_impl->save(img_path);
     }
 
-    // TODO
-    Image Image::apply([[maybe_unused]] Watermark &mark)
-    {
-        assert(m_impl != nullptr);
-        assert(mark.image().m_impl != nullptr);
-
-        // TODO
-        return mark.foo(*m_impl, *mark.image().m_impl);
-    }
-
     void Image::preview()
     {
         assert(m_impl != nullptr);

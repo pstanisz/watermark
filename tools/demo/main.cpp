@@ -21,7 +21,7 @@ int main()
         // img.save("test_img_1_small.png");
 
         Watermark mark{std::move(logo)};
-        auto result = img.apply(mark);
+        auto result = mark.apply_to(img);
 
         result.preview();
         result.save("test_img_1_mark.png");

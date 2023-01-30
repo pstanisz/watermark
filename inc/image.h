@@ -31,9 +31,6 @@ namespace watermark
 
         void save(const std::string &img_path);
 
-        // TODO
-        Image apply(Watermark &mark);
-
         // Test purposes
         void preview();
 

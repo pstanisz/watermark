@@ -18,18 +18,12 @@ namespace watermark
     {
     }
 
-    Image &Watermark::image()
+    Image Watermark::apply_to(Image &source_img)
     {
         assert(m_impl != nullptr);
+        assert(source_img.m_impl != nullptr);
 
-        return m_impl->image();
-    }
-
-    Image Watermark::foo([[maybe_unused]] Image_impl &img, [[maybe_unused]] Image_impl &mark)
-    {
-        assert(m_impl != nullptr);
-
-        return Image(m_impl->foo(img, mark));
+        return Image(m_impl->apply(source_img.m_impl, m_impl->image().m_impl));
     }
 
     Image add_watermark(
