@@ -7,8 +7,8 @@ namespace watermark
 {
     struct Position
     {
-        size_t m_x;
-        size_t m_y;
+        int m_x;
+        int m_y;
 
         bool operator==(const Position&) const = default;
         bool operator!=(const Position&) const = default;

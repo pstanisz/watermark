@@ -16,12 +16,10 @@ int main()
         Image img{"../tools/proto/data/test_img_1.png"};
         Image logo{"../tools/proto/data/test_logo_1.png"};
 
-        // Check of resize & save
-        // img.resize(watermark::Size(100, 100));
-        // img.save("test_img_1_small.png");
-
         Watermark mark{std::move(logo)};
-        auto result = mark.apply_to(img);
+
+        // Resized and placed
+        auto result = mark.apply_to(img, Size{300, 300}, Position{10, 10});
 
         result.preview();
         result.save("test_img_1_mark.png");

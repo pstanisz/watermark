@@ -36,12 +36,14 @@ namespace watermark
         return *this;
     }
 
-    Image Watermark::apply_to(Image &source_img)
+    Image Watermark::apply_to(Image &source_img,
+                              const Size &mark_size,
+                              const Position &mark_pos)
     {
         assert(m_impl != nullptr);
         assert(source_img.m_impl != nullptr);
 
-        return Image(m_impl->apply(source_img.m_impl, m_impl->image().m_impl));
+        return Image(m_impl->apply(source_img.m_impl, m_impl->image().m_impl, mark_size, mark_pos));
     }
 
     Image add_watermark(

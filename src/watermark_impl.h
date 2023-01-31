@@ -16,7 +16,10 @@ namespace watermark
 
         Image &image();
 
-        Image_impl *apply(Image_impl *source_img, Image_impl *mark_img);
+        Image_impl *apply(Image_impl *source_img,
+                          Image_impl *mark_img,
+                          const Size &mark_size,
+                          const Position &mark_pos);
 
     private:
         Image m_image;
