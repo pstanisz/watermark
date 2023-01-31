@@ -15,7 +15,13 @@ namespace watermark
     public:
         explicit Watermark(Image &&watermark_img);
         ~Watermark() noexcept;
-        
+
+        Watermark(const Watermark &) noexcept = delete;
+        Watermark &operator=(const Watermark &) = delete;
+
+        Watermark(Watermark &&other) noexcept;
+        Watermark &operator=(Watermark &&other) noexcept;
+
         Image apply_to(Image &source_img);
 
     private:

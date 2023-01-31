@@ -16,6 +16,24 @@ namespace watermark
 
     Watermark::~Watermark() noexcept
     {
+        if (m_impl)
+        {
+            delete m_impl;
+            m_impl = nullptr;
+        }
+    }
+
+    Watermark::Watermark(Watermark &&other) noexcept : m_impl{std::move(other.m_impl)}
+    {
+        other.m_impl = nullptr;
+    }
+
+    Watermark &Watermark::operator=(Watermark &&other) noexcept
+    {
+        m_impl = std::move(other.m_impl);
+        other.m_impl = nullptr;
+
+        return *this;
     }
 
     Image Watermark::apply_to(Image &source_img)

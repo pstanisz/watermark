@@ -31,7 +31,7 @@ namespace watermark
 
         void save(const std::string &img_path);
 
-        // Test purposes
+        // Test purposes only
         void preview();
 
     private:
