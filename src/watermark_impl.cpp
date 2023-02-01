@@ -26,7 +26,8 @@ namespace watermark
     Image_impl *Watermark_impl::apply(Image_impl *source_img,
                                       Image_impl *mark_img,
                                       const Size &mark_size,
-                                      const Position &mark_pos)
+                                      const Position &mark_pos,
+                                      Opacity opacity)
     {
         auto &img_mat = source_img->internal();
         auto &mark_mat = mark_img->internal();
@@ -55,7 +56,7 @@ namespace watermark
         std::cout << "mark_fit_to_img.cols = " << mark_fit_to_img.cols << std::endl;
 
         cv::Mat out;
-        addWeighted(mark_fit_to_img, 0.5, img_mat, 1.0, 0.0, out); // blends 2 images
+        addWeighted(mark_fit_to_img, opacity, img_mat, 1.0, 0.0, out); // blends 2 images
 
         return new Image_impl{out};
     }

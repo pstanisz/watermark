@@ -10,8 +10,8 @@ namespace watermark
         int m_x;
         int m_y;
 
-        bool operator==(const Position&) const = default;
-        bool operator!=(const Position&) const = default;
+        bool operator==(const Position &) const = default;
+        bool operator!=(const Position &) const = default;
     };
 
     struct Size
@@ -19,9 +19,9 @@ namespace watermark
         int m_width;
         int m_height;
 
-        bool operator==(const Size&) const = default;
-        bool operator!=(const Size&) const = default;
+        bool operator==(const Size &) const = default;
+        bool operator!=(const Size &) const = default;
     };
 
-
+    using Opacity = float;
 }

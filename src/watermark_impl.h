@@ -19,7 +19,8 @@ namespace watermark
         Image_impl *apply(Image_impl *source_img,
                           Image_impl *mark_img,
                           const Size &mark_size,
-                          const Position &mark_pos);
+                          const Position &mark_pos,
+                          Opacity opacity);
 
     private:
         Image m_image;

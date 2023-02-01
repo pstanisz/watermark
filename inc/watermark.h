@@ -24,7 +24,8 @@ namespace watermark
 
         Image apply_to(Image &source_img,
                        const Size &mark_size = Size{0U, 0U},
-                       const Position &mark_pos = Position{0U, 0U});
+                       const Position &mark_pos = Position{0U, 0U},
+                       Opacity opacity = 1.0);
 
     private:
         Watermark_impl *m_impl;

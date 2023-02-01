@@ -38,12 +38,13 @@ namespace watermark
 
     Image Watermark::apply_to(Image &source_img,
                               const Size &mark_size,
-                              const Position &mark_pos)
+                              const Position &mark_pos,
+                              Opacity opacity)
     {
         assert(m_impl != nullptr);
         assert(source_img.m_impl != nullptr);
 
-        return Image(m_impl->apply(source_img.m_impl, m_impl->image().m_impl, mark_size, mark_pos));
+        return Image(m_impl->apply(source_img.m_impl, m_impl->image().m_impl, mark_size, mark_pos, opacity));
     }
 
     Image add_watermark(
