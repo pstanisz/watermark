@@ -55,9 +55,6 @@ namespace watermark
         Type m_type;
     };
 
-    // Experimental
-    using Position = Position2;
-
     struct Size
     {
         int m_width;

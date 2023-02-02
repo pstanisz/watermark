@@ -1,6 +1,8 @@
 // Copyright (c) 2023, Piotr Staniszewski
 #pragma once
 
+#include <position.h>
+
 #include <string>
 
 namespace watermark

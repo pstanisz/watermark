@@ -47,9 +47,10 @@ namespace watermark
         // Assumes that mark is smaller than image
         cv::Mat mark_fit_to_img = cv::Mat::zeros(img_mat.rows, img_mat.cols, CV_8UC3);
 
-        if (mark_pos.m_type == Position::Type::Pos2)
+        if (mark_pos.has_point())
         {
-            resized_mark.copyTo(mark_fit_to_img(cv::Rect(mark_pos.pos2.m_x, mark_pos.pos2.m_y, resized_mark.cols, resized_mark.rows)));
+            auto point = mark_pos.point();
+            resized_mark.copyTo(mark_fit_to_img(cv::Rect(point.m_x, point.m_y, resized_mark.cols, resized_mark.rows)));
         }
         else {
             throw std::runtime_error("not implemented");

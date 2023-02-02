@@ -2,6 +2,7 @@
 #pragma once
 
 #include <common.h>
+#include <position.h>
 #include <image.h>
 
 #include <string>
