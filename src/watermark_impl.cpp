@@ -52,8 +52,15 @@ namespace watermark
             auto point = mark_pos.point();
             resized_mark.copyTo(mark_fit_to_img(cv::Rect(point.m_x, point.m_y, resized_mark.cols, resized_mark.rows)));
         }
-        else {
-            throw std::runtime_error("not implemented");
+        else if (mark_pos.has_layout())
+        {
+            //auto layout = mark_pos.layout();
+            // TODO: implement calculation of Point based on layout and input image size
+            throw std::runtime_error("Not implemented yet");
+        }
+        else
+        {
+            throw Position_exception(std::string("Position cannot be determined"));
         }
 
         std::cout << "img_mat.rows = " << img_mat.rows << std::endl;

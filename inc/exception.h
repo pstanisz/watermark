@@ -26,6 +26,15 @@ namespace watermark
     class Image_exception : public Exception
     {
     public:
-        explicit Image_exception(std::string &msg);
+        explicit Image_exception(const std::string &msg);
+    };
+
+    /**
+     * Represents any exception related to position.
+     */
+    class Position_exception : public Exception
+    {
+    public:
+        explicit Position_exception(const std::string &msg);
     };
 }

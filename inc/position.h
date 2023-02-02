@@ -8,7 +8,7 @@
 
 namespace watermark
 {
-    class PositionN
+    class Position
     {
     public:
         enum class Alignment : uint8_t
@@ -37,17 +37,17 @@ namespace watermark
         };
 
     public:
-        explicit PositionN(int x, int y);
-        explicit PositionN(const Point &point);
-        explicit PositionN(Alignment alignment, Margin margin = 0);
+        explicit Position(int x, int y);
+        explicit Position(const Point &point);
+        explicit Position(Alignment alignment, Margin margin = 0);
 
-        bool has_point() const noexcept { return std::holds_alternative<Point>(m_position); }
-        Point point() const { return std::get<Point>(m_position); }
+        bool has_point() const noexcept;
+        Point point() const;
+
+        bool has_layout() const noexcept;
+        Layout layout() const;
 
     private:
         std::variant<Point, Layout> m_position;
     };
-
-    // Experimental
-    using Position = PositionN;
 }
