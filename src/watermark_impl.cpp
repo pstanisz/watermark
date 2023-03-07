@@ -36,7 +36,7 @@ namespace watermark
 
         if (mark_size != Size{0U, 0U})
         {
-            cv::resize(mark_mat, resized_mark, {mark_size.m_width, mark_size.m_height}, cv::INTER_AREA);
+            cv::resize(mark_mat, resized_mark, {mark_size.width(), mark_size.height()}, cv::INTER_AREA);
         }
         else
         {

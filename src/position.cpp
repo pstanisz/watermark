@@ -26,6 +26,8 @@ namespace watermark
 
     Position::Point Position::point() const
     {
+        assert(has_point());
+
         return std::get<Point>(m_position);
     }
 
@@ -36,6 +38,8 @@ namespace watermark
 
     Position::Layout Position::layout() const
     {
+        assert(has_layout());
+        
         return std::get<Layout>(m_position);
     }
 

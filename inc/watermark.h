@@ -3,6 +3,7 @@
 
 #include <common.h>
 #include <position.h>
+#include <size.h>
 #include <image.h>
 
 #include <string>

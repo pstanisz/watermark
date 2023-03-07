@@ -2,6 +2,7 @@
 #pragma once
 
 #include <common.h>
+#include <size.h>
 
 #include <string>
 

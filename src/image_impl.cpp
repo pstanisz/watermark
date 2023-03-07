@@ -21,7 +21,7 @@ namespace watermark
         }
     }
 
-    Image_impl::Image_impl(const Size &img_size) : m_matrix{cv::Mat::zeros(img_size.m_height, img_size.m_width, CV_8UC3)}
+    Image_impl::Image_impl(const Size &img_size) : m_matrix{cv::Mat::zeros(img_size.height(), img_size.width(), CV_8UC3)}
     {
     }
 
@@ -40,7 +40,7 @@ namespace watermark
     {
         assert(!m_matrix.empty());
 
-        cv::resize(m_matrix, m_matrix, {new_size.m_width, new_size.m_height}, 0.0, 0.0, cv::INTER_AREA);
+        cv::resize(m_matrix, m_matrix, {new_size.width(), new_size.height()}, 0.0, 0.0, cv::INTER_AREA);
     }
 
     void Image_impl::save(const std::string &img_path)
