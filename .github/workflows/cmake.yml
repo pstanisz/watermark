@@ -22,6 +22,10 @@ jobs:
 
     - name: Install OpenCV
       run: |
+        sudo apt-get purge grub\*
+        sudo apt-get install grub-efi
+        sudo apt-get autoremove
+        sudo update-grub
         sudo apt update -y
         sudo apt upgrade -y
         sudo apt install -y libopencv-dev
