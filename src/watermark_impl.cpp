@@ -25,8 +25,8 @@ namespace watermark
 
     Image_impl *Watermark_impl::apply(Image_impl *source_img,
                                       Image_impl *mark_img,
-                                      const Size &mark_size,
                                       const Position &mark_pos,
+                                      const Size &mark_size,
                                       Opacity opacity)
     {
         auto &img_mat = source_img->internal();
