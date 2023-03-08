@@ -13,6 +13,35 @@
 
 namespace watermark
 {
+    Size calculate_mark_size(const Size &source_size, const Size &mark_size, const Size &requested_size)
+    {
+        if (requested_size.has_fit())
+        {
+            auto fit = requested_size.fit();
+            if (fit == Size::Fit::None)
+            {
+                return mark_size;
+            }
+            else
+            {
+                // TODO: calculate new size
+                return mark_size;
+            }
+        }
+        else
+        {
+            auto area = requested_size.area();
+            if (area.is_empty())
+            {
+                // TODO: original size or exception?
+                return mark_size;
+            }
+            else
+            {
+                return requested_size;
+            }
+        }
+    }
 
     Watermark_impl::Watermark_impl(Image &&watermark_img) : m_image{std::move(watermark_img)}
     {
@@ -34,14 +63,8 @@ namespace watermark
 
         cv::Mat resized_mark;
 
-        if (mark_size != Size{0U, 0U})
-        {
-            cv::resize(mark_mat, resized_mark, {mark_size.width(), mark_size.height()}, cv::INTER_AREA);
-        }
-        else
-        {
-            resized_mark = mark_mat;
-        }
+        auto calculated_size = calculate_mark_size(source_img->size(), mark_img->size(), mark_size);
+        cv::resize(mark_mat, resized_mark, {calculated_size.width(), calculated_size.height()}, cv::INTER_AREA);
 
         // Dummy implementation without checking any sizes
         // Assumes that mark is smaller than image
@@ -54,8 +77,8 @@ namespace watermark
         }
         else if (mark_pos.has_layout())
         {
-            //auto layout = mark_pos.layout();
-            // TODO: implement calculation of Point based on layout and input image size
+            // auto layout = mark_pos.layout();
+            //  TODO: implement calculation of Point based on layout and input image size
             throw std::runtime_error("Not implemented yet");
         }
         else

@@ -26,6 +26,8 @@ namespace watermark
 
             bool operator==(const Area &) const = default;
             bool operator!=(const Area &) const = default;
+
+            bool is_empty() const;
         };
 
     public:

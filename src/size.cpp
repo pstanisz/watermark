@@ -56,4 +56,9 @@ namespace watermark
 
         return std::get<Area>(m_size).m_height;
     }
+
+    bool Size::Area::is_empty() const
+    {
+        return (m_height <= 0 || m_width <= 0);
+    }
 }
