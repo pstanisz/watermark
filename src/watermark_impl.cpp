@@ -22,10 +22,21 @@ namespace watermark
             {
                 return mark_size;
             }
+            else if (fit == Size::Fit::To_image)
+            {
+                return source_size;
+            }
+            else if (fit == Size::Fit::To_height)
+            {
+                return mark_size;
+            }
+            else if (fit == Size::Fit::To_width)
+            {
+                return mark_size;
+            }
             else
             {
-                // TODO: calculate new size
-                return mark_size;
+                throw std::runtime_error("Unrecognized size option");
             }
         }
         else
@@ -33,8 +44,7 @@ namespace watermark
             auto area = requested_size.area();
             if (area.is_empty())
             {
-                // TODO: original size or exception?
-                return mark_size;
+                throw std::runtime_error("Empty size");
             }
             else
             {
