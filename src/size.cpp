@@ -2,62 +2,24 @@
 
 #include <size.h>
 
-#include <cassert>
-
 namespace watermark
 {
 
-    Size::Size(int width, int height) : m_size{Area{width, height}}
+    Size::Size(int width, int height) : m_width{width}, m_height{height}
     {
     }
 
-    Size::Size(const Area &area) : m_size{area}
+    int Size::width() const noexcept
     {
+        return m_width;
     }
 
-    Size::Size(Fit fit) : m_size{fit}
+    int Size::height() const noexcept
     {
+        return m_height;
     }
 
-    bool Size::has_area() const noexcept
-    {
-        return std::holds_alternative<Area>(m_size);
-    }
-
-    Size::Area Size::area() const
-    {
-        assert(has_area());
-
-        return std::get<Area>(m_size);
-    }
-
-    bool Size::has_fit() const noexcept
-    {
-        return std::holds_alternative<Fit>(m_size);
-    }
-
-    Size::Fit Size::fit() const
-    {
-        assert(has_fit());
-
-        return std::get<Fit>(m_size);
-    }
-
-    int Size::width() const
-    {
-        assert(has_area());
-
-        return std::get<Area>(m_size).m_width;
-    }
-
-    int Size::height() const
-    {
-        assert(has_area());
-
-        return std::get<Area>(m_size).m_height;
-    }
-
-    bool Size::Area::is_empty() const
+    bool Size::is_empty() const noexcept
     {
         return (m_height <= 0 || m_width <= 0);
     }

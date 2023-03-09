@@ -13,45 +13,6 @@
 
 namespace watermark
 {
-    Size calculate_mark_size(const Size &source_size, const Size &mark_size, const Size &requested_size)
-    {
-        if (requested_size.has_fit())
-        {
-            auto fit = requested_size.fit();
-            if (fit == Size::Fit::None)
-            {
-                return mark_size;
-            }
-            else if (fit == Size::Fit::To_image)
-            {
-                return source_size;
-            }
-            else if (fit == Size::Fit::To_height)
-            {
-                return mark_size;
-            }
-            else if (fit == Size::Fit::To_width)
-            {
-                return mark_size;
-            }
-            else
-            {
-                throw std::runtime_error("Unrecognized size option");
-            }
-        }
-        else
-        {
-            auto area = requested_size.area();
-            if (area.is_empty())
-            {
-                throw std::runtime_error("Empty size");
-            }
-            else
-            {
-                return requested_size;
-            }
-        }
-    }
 
     Watermark_impl::Watermark_impl(Image &&watermark_img) : m_image{std::move(watermark_img)}
     {
@@ -73,8 +34,9 @@ namespace watermark
 
         cv::Mat resized_mark;
 
-        auto calculated_size = calculate_mark_size(source_img->size(), mark_img->size(), mark_size);
-        cv::resize(mark_mat, resized_mark, {calculated_size.width(), calculated_size.height()}, cv::INTER_AREA);
+        if (!mark_size.is_empty()) {
+            cv::resize(mark_mat, resized_mark, {mark_size.width(), mark_size.height()}, cv::INTER_AREA);
+        }
 
         // Dummy implementation without checking any sizes
         // Assumes that mark is smaller than image
