@@ -24,6 +24,8 @@ namespace watermark
                           const Size &mark_size,
                           Opacity opacity);
 
+        // TODO: new API using layout
+
     private:
         Image m_image;
     };
