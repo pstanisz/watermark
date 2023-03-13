@@ -19,7 +19,7 @@ int main()
         Watermark mark{std::move(logo)};
 
         // Resized and placed
-        auto result = mark.apply_to(img, Point{10, 10}, Size{300, 300}, 0.5f);
+        auto result = mark.apply_to(img, Point{10, 10}, Size{100, 100}, 0.5f);
 
         result.preview();
         result.save("test_img_1_mark.png");
@@ -27,6 +27,12 @@ int main()
     catch (const Exception &ex)
     {
         std::cerr << "Exception caught: " << ex.what() << std::endl;
+
+        return EXIT_FAILURE;
+    }
+    catch (const std::exception &ex)
+    {
+        std::cerr << "Std exception caught: " << ex.what() << std::endl;
 
         return EXIT_FAILURE;
     }

@@ -37,4 +37,13 @@ namespace watermark
     public:
         explicit Position_exception(const std::string &msg);
     };
+
+    /**
+     * Represents any exception related to size.
+     */
+    class Size_exception : public Exception
+    {
+    public:
+        explicit Size_exception(const std::string &msg);
+    };
 }

@@ -34,7 +34,16 @@ namespace watermark
 
         cv::Mat resized_mark;
 
-        if (!mark_size.is_empty())
+        if (mark_size.is_empty())
+        {
+            throw Size_exception("Cannot use empty mark size");
+        }
+
+        if (mark_size == mark_img->size())
+        {
+            resized_mark = mark_mat;
+        }
+        else
         {
             cv::resize(mark_mat, resized_mark, {mark_size.width(), mark_size.height()}, cv::INTER_AREA);
         }

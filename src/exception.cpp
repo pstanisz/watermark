@@ -22,4 +22,9 @@ namespace watermark
     Position_exception::Position_exception(const std::string &msg) : Exception(msg)
     {
     }
+
+    Size_exception::Size_exception(const std::string &msg) : Exception(msg)
+    {
+    }
+
 }
