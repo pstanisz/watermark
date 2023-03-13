@@ -2,7 +2,7 @@
 #pragma once
 
 #include <common.h>
-#include <position.h>
+#include <point.h>
 #include <size.h>
 #include <image.h>
 
@@ -25,7 +25,7 @@ namespace watermark
         Watermark &operator=(Watermark &&other) noexcept;
 
         Image apply_to(Image &source_img,
-                       const Position &mark_pos = Position{0U, 0U},
+                       const Point &mark_pos = Point{0U, 0U},
                        const Size &mark_size = Size{0U, 0U},
                        Opacity opacity = 1.0);
 
@@ -38,11 +38,5 @@ namespace watermark
     private:
         Watermark_impl *m_impl;
     };
-
-    Image add_watermark(
-        const Image &input_img,
-        const Image &watermark_img,
-        const Position &position,
-        const Size &size);
 
 }

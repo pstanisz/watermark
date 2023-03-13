@@ -1,7 +1,7 @@
 // Copyright (c) 2023, Piotr Staniszewski
 #pragma once
 
-#include <position.h>
+#include <point.h>
 
 #include <string>
 
@@ -20,7 +20,7 @@ namespace watermark
 
         Image_impl *apply(Image_impl *source_img,
                           Image_impl *mark_img,
-                          const Position &mark_pos,
+                          const Point &mark_pos,
                           const Size &mark_size,
                           Opacity opacity);
 

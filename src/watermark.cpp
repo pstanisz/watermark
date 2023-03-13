@@ -37,7 +37,7 @@ namespace watermark
     }
 
     Image Watermark::apply_to(Image &source_img,
-                              const Position &mark_pos,
+                              const Point &mark_pos,
                               const Size &mark_size,
                               Opacity opacity)
     {
@@ -50,7 +50,7 @@ namespace watermark
     Image add_watermark(
         [[maybe_unused]] const Image &input_img,
         [[maybe_unused]] const Image &watermark_img,
-        [[maybe_unused]] const Position &position,
+        [[maybe_unused]] const Point &point,
         [[maybe_unused]] const Size &size)
     {
         Image working{input_img.size()};
