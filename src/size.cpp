@@ -23,4 +23,9 @@ namespace watermark
     {
         return (m_height <= 0 || m_width <= 0);
     }
+
+    bool Size::fits_in(const Size &size) const noexcept
+    {
+        return ((m_height <= size.m_height) && (m_width <= size.m_width));
+    }
 }

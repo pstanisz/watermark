@@ -19,7 +19,7 @@ int main()
         Watermark mark{std::move(logo)};
 
         // Resized and placed
-        auto result = mark.apply_to(img, Point{10, 10}, Size{100, 100}, 0.5f);
+        auto result = mark.apply_to(img, Point{10, 10}, Size{800, 800}, 0.5f);
 
         result.preview();
         result.save("test_img_1_mark.png");

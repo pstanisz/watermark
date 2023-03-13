@@ -19,8 +19,9 @@ namespace watermark
 
         bool operator==(const Size &) const = default;
         bool operator!=(const Size &) const = default;
-
+        
         bool is_empty() const noexcept;
+        bool fits_in(const Size& size) const noexcept;
 
     private:
         int m_width;
