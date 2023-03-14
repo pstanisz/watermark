@@ -19,6 +19,16 @@ namespace watermark
         return m_height;
     }
 
+    Size Size::operator+(const Point &point)
+    {
+        return Size{m_width + point.m_x, m_height + point.m_y};
+    }
+
+    Size Size::operator-(const Point &point)
+    {
+        return Size{m_width - point.m_x, m_height - point.m_y};
+    }
+
     bool Size::is_empty() const noexcept
     {
         return (m_height <= 0 || m_width <= 0);

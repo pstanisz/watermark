@@ -1,6 +1,8 @@
 // Copyright(c) 2023, Piotr Staniszewski
 #pragma once
 
+#include "point.h"
+
 #include <cstdlib>
 #include <cstdint>
 
@@ -19,9 +21,12 @@ namespace watermark
 
         bool operator==(const Size &) const = default;
         bool operator!=(const Size &) const = default;
-        
+
+        Size operator+(const Point &point);
+        Size operator-(const Point &point);
+
         bool is_empty() const noexcept;
-        bool fits_in(const Size& size) const noexcept;
+        bool fits_in(const Size &size) const noexcept;
 
     private:
         int m_width;

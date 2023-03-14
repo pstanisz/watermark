@@ -39,9 +39,10 @@ namespace watermark
             throw Size_exception("Cannot use empty mark size");
         }
 
-        if (!mark_size.fits_in(source_img->size()))
+        auto available_size = source_img->size() - mark_pos;
+        if (!mark_size.fits_in(available_size))
         {
-            throw Size_exception("Mark size cannot fit into source image size");
+            throw Size_exception("Requested mark size won't fit into source image");
         }
 
         if (mark_size == mark_img->size())
