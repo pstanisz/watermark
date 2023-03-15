@@ -4,6 +4,7 @@
 #include <common.h>
 #include <point.h>
 #include <size.h>
+#include <layout.h>
 #include <image.h>
 
 #include <string>
@@ -29,11 +30,11 @@ namespace watermark
                        const Size &mark_size = Size{0U, 0U},
                        Opacity opacity = 1.0);
 
-        // TODO: new API using layout
-        // Image apply_to(Image &source_img,
-        //                Layout layout = Layout::Middle,
-        //                const Size &mark_size = Size{0U, 0U},
-        //                Opacity opacity = 1.0);
+        Image apply_to(Image &source_img,
+                       Layout layout,
+                       Margin margin = 0U,
+                       const Size &mark_size = Size{0U, 0U},
+                       Opacity opacity = 1.0);
 
     private:
         Watermark_impl *m_impl;

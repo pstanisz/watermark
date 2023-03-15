@@ -2,6 +2,7 @@
 #pragma once
 
 #include <point.h>
+#include <layout.h>
 
 #include <string>
 
@@ -24,7 +25,12 @@ namespace watermark
                           const Size &mark_size,
                           Opacity opacity);
 
-        // TODO: new API using layout
+        Image_impl *apply(Image_impl *source_img,
+                          Image_impl *mark_img,
+                          Layout layout,
+                          Margin margin,
+                          const Size &mark_size,
+                          Opacity opacity);
 
     private:
         Image m_image;

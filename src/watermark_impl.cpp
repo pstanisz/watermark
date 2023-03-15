@@ -71,4 +71,17 @@ namespace watermark
 
         return new Image_impl{out};
     }
+
+    Image_impl *Watermark_impl::apply(Image_impl *source_img,
+                                      Image_impl *mark_img,
+                                      Layout layout,
+                                      Margin margin,
+                                      const Size &mark_size,
+                                      Opacity opacity)
+    {
+        //TODO: calculate point based on layout & margin
+        //return apply(source_img, mark_img, mark_pos, mark_size, opacity);
+
+        return nullptr;
+    }
 }

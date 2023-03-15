@@ -47,17 +47,16 @@ namespace watermark
         return Image(m_impl->apply(source_img.m_impl, m_impl->image().m_impl, mark_pos, mark_size, opacity));
     }
 
-    Image add_watermark(
-        [[maybe_unused]] const Image &input_img,
-        [[maybe_unused]] const Image &watermark_img,
-        [[maybe_unused]] const Point &point,
-        [[maybe_unused]] const Size &size)
+    Image Watermark::apply_to(Image &source_img,
+                              Layout layout,
+                              Margin margin,
+                              const Size &mark_size,
+                              Opacity opacity)
     {
-        Image working{input_img.size()};
+        assert(m_impl != nullptr);
+        assert(source_img.m_impl != nullptr);
 
-        // TODO
-
-        return Image("");
+        return Image(m_impl->apply(source_img.m_impl, m_impl->image().m_impl, layout, margin, mark_size, opacity));
     }
 
 }

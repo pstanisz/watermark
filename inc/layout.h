@@ -6,7 +6,7 @@
 namespace watermark
 {
 
-    enum class Layoyut : uint8_t
+    enum class Layout : uint8_t
     {
         Top_left = 0U,
         Top_middle,
@@ -18,5 +18,7 @@ namespace watermark
         Bottom_middle,
         Botton_right
     };
+
+    using Margin = uint32_t;
 
 }
