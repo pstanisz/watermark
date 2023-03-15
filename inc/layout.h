@@ -16,7 +16,7 @@ namespace watermark
         Middle_right,
         Bottom_left,
         Bottom_middle,
-        Botton_right
+        Bottom_right
     };
 
 }

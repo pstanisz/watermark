@@ -78,9 +78,36 @@ namespace watermark
                                       const Size &mark_size,
                                       Opacity opacity)
     {
-        //TODO: calculate point based on layout
-        //return apply(source_img, mark_img, mark_pos, mark_size, opacity);
+        // TODO: calculate point based on layout
+        auto source_size = source_img->size();
 
-        return nullptr;
+        Point mark_pos{0, 0};
+        switch (layout)
+        {
+        case Layout::Top_left:
+            mark_pos = {0, 0};
+            break;
+        case Layout::Top_middle:
+            break;
+        case Layout::Top_right:
+            break;
+        case Layout::Middle_left:
+            break;
+        case Layout::Middle_middle:
+            break;
+        case Layout::Middle_right:
+            break;
+        case Layout::Bottom_left:
+            break;
+        case Layout::Bottom_middle:
+            break;
+        case Layout::Bottom_right:
+            mark_pos = {source_size.width() - mark_size.width(), source_size.height() - mark_size.height()};
+            break;
+        default:
+            break;
+        }
+
+        return apply(source_img, mark_img, mark_pos, mark_size, opacity);
     }
 }
