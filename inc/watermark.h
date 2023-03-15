@@ -32,7 +32,6 @@ namespace watermark
 
         Image apply_to(Image &source_img,
                        Layout layout,
-                       Margin margin = 0U,
                        const Size &mark_size = Size{0U, 0U},
                        Opacity opacity = 1.0);
 

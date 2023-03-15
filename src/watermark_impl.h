@@ -28,7 +28,6 @@ namespace watermark
         Image_impl *apply(Image_impl *source_img,
                           Image_impl *mark_img,
                           Layout layout,
-                          Margin margin,
                           const Size &mark_size,
                           Opacity opacity);
 

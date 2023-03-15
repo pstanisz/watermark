@@ -19,6 +19,4 @@ namespace watermark
         Botton_right
     };
 
-    using Margin = uint32_t;
-
 }

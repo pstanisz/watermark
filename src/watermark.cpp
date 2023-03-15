@@ -49,14 +49,13 @@ namespace watermark
 
     Image Watermark::apply_to(Image &source_img,
                               Layout layout,
-                              Margin margin,
                               const Size &mark_size,
                               Opacity opacity)
     {
         assert(m_impl != nullptr);
         assert(source_img.m_impl != nullptr);
 
-        return Image(m_impl->apply(source_img.m_impl, m_impl->image().m_impl, layout, margin, mark_size, opacity));
+        return Image(m_impl->apply(source_img.m_impl, m_impl->image().m_impl, layout, mark_size, opacity));
     }
 
 }
