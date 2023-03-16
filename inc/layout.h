@@ -12,7 +12,7 @@ namespace watermark
         Top_middle,
         Top_right,
         Middle_left,
-        Middle_middle,
+        Center,
         Middle_right,
         Bottom_left,
         Bottom_middle,

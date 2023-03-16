@@ -4,6 +4,7 @@
 
 #include <watermark.h>
 #include <exception.h>
+#include <vector>
 
 int main()
 {
@@ -19,11 +20,25 @@ int main()
         Watermark mark{std::move(logo)};
 
         // Resized and placed
-        //auto result = mark.apply_to(img, Point{10, 10}, Size{300, 300}, 0.5f);
-        auto result = mark.apply_to(img, Layout::Bottom_right, Size{300, 300}, 0.5f);
+        // auto result = mark.apply_to(img, Point{10, 10}, Size{300, 300}, 0.5f);
 
-        result.preview();
-        result.save("test_img_1_mark.png");
+        std::vector<Layout> layouts = { Layout::Top_left,
+                                        Layout::Top_middle,
+                                        Layout::Top_right,
+                                        Layout::Middle_left,
+                                        Layout::Center,
+                                        Layout::Middle_right,
+                                        Layout::Bottom_left,
+                                        Layout::Bottom_middle,
+                                        Layout::Bottom_right };
+
+        for (auto layout : layouts) {
+            auto result = mark.apply_to(img, layout, Size{300, 300}, 0.5f);
+
+            result.preview();
+        }
+
+        //result.save("test_img_1_mark.png");
     }
     catch (const Exception &ex)
     {

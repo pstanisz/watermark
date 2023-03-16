@@ -78,35 +78,78 @@ namespace watermark
                                       const Size &mark_size,
                                       Opacity opacity)
     {
-        // TODO: calculate point based on layout
+        if (mark_size.is_empty())
+        {
+            throw Size_exception("Cannot use empty mark size");
+        }
+
         auto source_size = source_img->size();
+        auto middle_height = static_cast<int>(source_size.height() / 2);
+        auto middle_width = static_cast<int>(source_size.width() / 2);
+        auto half_mark_height = static_cast<int>(mark_size.height() / 2);
+        auto half_mark_width = static_cast<int>(mark_size.width() / 2);
+
+        std::cout << "source_size = (" << source_size.width() << ", " << source_size.height() << ")\n";
+        std::cout << "mark_size = (" << mark_size.width() << ", " << mark_size.height() << ")\n";
+        std::cout << "middle_height = " << middle_height << "\n";
+        std::cout << "middle_width = " << middle_width << "\n";
+        std::cout << "half_mark_height = " << half_mark_height << "\n";
+        std::cout << "half_mark_width = " << half_mark_width << "\n";
+        std::cout << "layout = " << static_cast<int>(layout) << "\n";
 
         Point mark_pos{0, 0};
         switch (layout)
         {
         case Layout::Top_left:
-            mark_pos = {0, 0};
+        {
+            mark_pos = Point{0, 0};
             break;
+        }
         case Layout::Top_middle:
+        {
+            mark_pos = Point{middle_width - half_mark_width, 0};
             break;
+        }
         case Layout::Top_right:
+        {
+            mark_pos = Point{source_size.width() - mark_size.width(), 0};
             break;
+        }
         case Layout::Middle_left:
+        {
+            mark_pos = Point{0, middle_height - half_mark_height};
             break;
-        case Layout::Middle_middle:
+        }
+        case Layout::Center:
+        {
+            mark_pos = Point{middle_width - half_mark_width, middle_height - half_mark_height};
             break;
+        }
         case Layout::Middle_right:
+        {
+            mark_pos = Point{source_size.width() - mark_size.width(), middle_height - half_mark_height};
             break;
+        }
         case Layout::Bottom_left:
+        {
+            mark_pos = Point{0, source_size.height() - mark_size.height()};
             break;
+        }
         case Layout::Bottom_middle:
+        {
+            mark_pos = Point{middle_width - half_mark_width, source_size.height() - mark_size.height()};
             break;
+        }
         case Layout::Bottom_right:
+        {
             mark_pos = {source_size.width() - mark_size.width(), source_size.height() - mark_size.height()};
             break;
+        }
         default:
             break;
         }
+
+        std::cout << "mark_pos = (" << mark_pos.m_x << ", " << mark_pos.m_y << ")\n";
 
         return apply(source_img, mark_img, mark_pos, mark_size, opacity);
     }
