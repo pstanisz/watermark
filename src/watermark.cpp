@@ -37,6 +37,35 @@ namespace watermark
     }
 
     Image Watermark::apply_to(Image &source_img,
+                              Opacity opacity)
+    {
+        assert(m_impl != nullptr);
+        assert(source_img.m_impl != nullptr);
+
+        return apply_to(source_img, Point{0, 0}, m_impl->image().size(), opacity);
+    }
+
+    Image Watermark::apply_to(Image &source_img,
+                              const Point &mark_pos,
+                              Opacity opacity)
+    {
+        assert(m_impl != nullptr);
+        assert(source_img.m_impl != nullptr);
+
+        return apply_to(source_img, mark_pos, m_impl->image().size(), opacity);
+    }
+
+    Image Watermark::apply_to(Image &source_img,
+                              Layout layout,
+                              Opacity opacity)
+    {
+        assert(m_impl != nullptr);
+        assert(source_img.m_impl != nullptr);
+
+        return Image(m_impl->apply(source_img.m_impl, m_impl->image().m_impl, layout, m_impl->image().size(), opacity));
+    }
+
+    Image Watermark::apply_to(Image &source_img,
                               const Point &mark_pos,
                               const Size &mark_size,
                               Opacity opacity)

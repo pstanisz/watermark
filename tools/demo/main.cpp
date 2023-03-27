@@ -33,7 +33,7 @@ int main()
                                         Layout::Bottom_right };
 
         for (auto layout : layouts) {
-            auto result = mark.apply_to(img, layout, Size{300, 300}, 0.5f);
+            auto result = mark.apply_to(img, layout, 0.5f);
 
             result.preview();
         }
