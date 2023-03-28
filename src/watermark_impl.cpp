@@ -4,6 +4,7 @@
 
 #include "watermark_impl.h"
 #include "image_impl.h"
+#include "utils.h"
 
 #include <opencv2/core.hpp>
 #include <opencv2/imgproc.hpp>
@@ -59,13 +60,6 @@ namespace watermark
         cv::Mat mark_fit_to_img = cv::Mat::zeros(img_mat.rows, img_mat.cols, CV_8UC3);
         resized_mark.copyTo(mark_fit_to_img(cv::Rect(mark_pos.m_x, mark_pos.m_y, resized_mark.cols, resized_mark.rows)));
 
-        std::cout << "img_mat.rows = " << img_mat.rows << std::endl;
-        std::cout << "img_mat.cols = " << img_mat.cols << std::endl;
-        std::cout << "resized_mark.rows = " << resized_mark.rows << std::endl;
-        std::cout << "resized_mark.cols = " << resized_mark.cols << std::endl;
-        std::cout << "mark_fit_to_img.rows = " << mark_fit_to_img.rows << std::endl;
-        std::cout << "mark_fit_to_img.cols = " << mark_fit_to_img.cols << std::endl;
-
         cv::Mat out;
         addWeighted(mark_fit_to_img, opacity, img_mat, 1.0, 0.0, out); // blends 2 images
 
@@ -83,74 +77,7 @@ namespace watermark
             throw Size_exception("Cannot use empty mark size");
         }
 
-        auto source_size = source_img->size();
-        auto middle_height = static_cast<int>(source_size.height() / 2);
-        auto middle_width = static_cast<int>(source_size.width() / 2);
-        auto half_mark_height = static_cast<int>(mark_size.height() / 2);
-        auto half_mark_width = static_cast<int>(mark_size.width() / 2);
-
-        std::cout << "source_size = (" << source_size.width() << ", " << source_size.height() << ")\n";
-        std::cout << "mark_size = (" << mark_size.width() << ", " << mark_size.height() << ")\n";
-        std::cout << "middle_height = " << middle_height << "\n";
-        std::cout << "middle_width = " << middle_width << "\n";
-        std::cout << "half_mark_height = " << half_mark_height << "\n";
-        std::cout << "half_mark_width = " << half_mark_width << "\n";
-        std::cout << "layout = " << static_cast<int>(layout) << "\n";
-
-        Point mark_pos{0, 0};
-        switch (layout)
-        {
-        case Layout::Top_left:
-        {
-            mark_pos = Point{0, 0};
-            break;
-        }
-        case Layout::Top_middle:
-        {
-            mark_pos = Point{middle_width - half_mark_width, 0};
-            break;
-        }
-        case Layout::Top_right:
-        {
-            mark_pos = Point{source_size.width() - mark_size.width(), 0};
-            break;
-        }
-        case Layout::Middle_left:
-        {
-            mark_pos = Point{0, middle_height - half_mark_height};
-            break;
-        }
-        case Layout::Center:
-        {
-            mark_pos = Point{middle_width - half_mark_width, middle_height - half_mark_height};
-            break;
-        }
-        case Layout::Middle_right:
-        {
-            mark_pos = Point{source_size.width() - mark_size.width(), middle_height - half_mark_height};
-            break;
-        }
-        case Layout::Bottom_left:
-        {
-            mark_pos = Point{0, source_size.height() - mark_size.height()};
-            break;
-        }
-        case Layout::Bottom_middle:
-        {
-            mark_pos = Point{middle_width - half_mark_width, source_size.height() - mark_size.height()};
-            break;
-        }
-        case Layout::Bottom_right:
-        {
-            mark_pos = {source_size.width() - mark_size.width(), source_size.height() - mark_size.height()};
-            break;
-        }
-        default:
-            break;
-        }
-
-        std::cout << "mark_pos = (" << mark_pos.m_x << ", " << mark_pos.m_y << ")\n";
-
+        auto mark_pos = position_by_layout(layout, source_img->size(), mark_size);
         return apply(source_img, mark_img, mark_pos, mark_size, opacity);
     }
 }
