@@ -39,6 +39,7 @@ target_include_directories(
     ${TARGET_NAME}
     PRIVATE
     ${INC_DIR}
+    ${SRC_DIR}
     mocks
 )
 

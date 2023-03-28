@@ -55,10 +55,9 @@ namespace watermark
             cv::resize(mark_mat, resized_mark, {mark_size.width(), mark_size.height()}, cv::INTER_AREA);
         }
 
-        // Dummy implementation without checking any sizes
-        // Assumes that mark is smaller than image
         cv::Mat mark_fit_to_img = cv::Mat::zeros(img_mat.rows, img_mat.cols, CV_8UC3);
-        resized_mark.copyTo(mark_fit_to_img(cv::Rect(mark_pos.m_x, mark_pos.m_y, resized_mark.cols, resized_mark.rows)));
+        const auto rect = cv::Rect(mark_pos.m_x, mark_pos.m_y, resized_mark.cols, resized_mark.rows);
+        resized_mark.copyTo(mark_fit_to_img(rect));
 
         cv::Mat out;
         addWeighted(mark_fit_to_img, opacity, img_mat, 1.0, 0.0, out); // blends 2 images
