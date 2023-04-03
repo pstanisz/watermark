@@ -12,7 +12,7 @@ namespace cv
         return watermark::mock::g_imread_mock->imread(filename, flags);
     }
 
-    bool imwrite(const std::string &filename, const Mat &)
+    bool imwrite([[maybe_unused]]const std::string &filename, const Mat &)
     {
         return true;
     }

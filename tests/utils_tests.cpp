@@ -11,10 +11,6 @@
 
 namespace watermark
 {
-    namespace mock
-    {
-        Imread_mock *g_imread_mock;
-    }
 
     namespace test
     {
