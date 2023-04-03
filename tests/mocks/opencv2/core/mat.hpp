@@ -9,7 +9,7 @@ namespace cv
     struct Mat
     {
         Mat() : m_empty{true} {}
-        Mat(bool, int r, int c) : m_empty{false}, rows{r}, cols{c} {}
+        Mat(bool empty, int r, int c) : m_empty{empty}, rows{r}, cols{c} {}
         bool empty() const noexcept { return m_empty; }
         Size size() const { return Size{rows, cols}; }
         static Mat zeros(int rows, int cols, [[maybe_unused]] int type) { return Mat{false, rows, cols}; }
