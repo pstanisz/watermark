@@ -6,8 +6,6 @@
 #include <cstdlib>
 #include <cstdint>
 
-#include <variant>
-
 namespace watermark
 {
     class Size
