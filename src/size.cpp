@@ -22,12 +22,12 @@ namespace watermark
         return m_height;
     }
 
-    Size Size::operator+(const Point &point)
+    Size Size::operator+(const Point &point) const
     {
         return Size{m_width + point.m_x, m_height + point.m_y};
     }
 
-    Size Size::operator-(const Point &point)
+    Size Size::operator-(const Point &point) const
     {
         if ((m_width < point.m_x) || (m_height < point.m_y))
         {

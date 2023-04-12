@@ -20,8 +20,8 @@ namespace watermark
         bool operator==(const Size &) const = default;
         bool operator!=(const Size &) const = default;
 
-        Size operator+(const Point &point);
-        Size operator-(const Point &point);
+        Size operator+(const Point &point) const;
+        Size operator-(const Point &point) const;
 
         bool is_empty() const noexcept;
         bool fits_in(const Size &size) const noexcept;
