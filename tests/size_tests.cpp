@@ -15,7 +15,7 @@ namespace watermark
             ASSERT_TRUE(size.is_empty());
         }
 
-        using Size_ctor_test_params = std::tuple<int, int, bool>;
+        using Size_ctor_test_params = std::tuple<unsigned int, unsigned int, bool>;
         class Size_ctor_test : public ::testing::TestWithParam<Size_ctor_test_params>
         {
         };
@@ -37,8 +37,6 @@ namespace watermark
                 std::make_tuple(0, 0, true),
                 std::make_tuple(0, 10, true),
                 std::make_tuple(10, 0, true),
-                std::make_tuple(-1, 50, true),
-                std::make_tuple(50, -2, true),
                 std::make_tuple(1, 999, false),
                 std::make_tuple(1234, 5678, false),
                 std::make_tuple(99, 88, false)));

@@ -10,10 +10,10 @@ namespace watermark
         assert(!source_size.is_empty() && "source_size cannot be empty");
         assert(!mark_size.is_empty() && "mark_size cannot be empty");
 
-        auto middle_height = static_cast<int>(source_size.height() / 2);
-        auto middle_width = static_cast<int>(source_size.width() / 2);
-        auto half_mark_height = static_cast<int>(mark_size.height() / 2);
-        auto half_mark_width = static_cast<int>(mark_size.width() / 2);
+        auto middle_height = static_cast<unsigned int>(source_size.height() / 2);
+        auto middle_width = static_cast<unsigned int>(source_size.width() / 2);
+        auto half_mark_height = static_cast<unsigned int>(mark_size.height() / 2);
+        auto half_mark_width = static_cast<unsigned int>(mark_size.width() / 2);
 
         Point mark_pos{0, 0};
         switch (layout)

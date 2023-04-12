@@ -12,10 +12,10 @@ namespace watermark
     {
     public:
         Size() = default;
-        explicit Size(int width, int height);
+        explicit Size(unsigned int width, unsigned int height);
 
-        int width() const noexcept;
-        int height() const noexcept;
+        unsigned int width() const noexcept;
+        unsigned int height() const noexcept;
 
         bool operator==(const Size &) const = default;
         bool operator!=(const Size &) const = default;
@@ -27,7 +27,7 @@ namespace watermark
         bool fits_in(const Size &size) const noexcept;
 
     private:
-        int m_width;
-        int m_height;
+        unsigned int m_width{0U};
+        unsigned int m_height{0U};
     };
 }

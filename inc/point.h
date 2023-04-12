@@ -8,8 +8,8 @@ namespace watermark
 
     struct Point
     {
-        int m_x;
-        int m_y;
+        unsigned int m_x;
+        unsigned int m_y;
 
         bool operator==(const Point &) const = default;
         bool operator!=(const Point &) const = default;

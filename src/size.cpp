@@ -1,20 +1,23 @@
 // Copyright (c) 2023, Piotr Staniszewski
 
 #include <size.h>
+#include <exception.h>
+
+#include <limits>
 
 namespace watermark
 {
 
-    Size::Size(int width, int height) : m_width{width}, m_height{height}
+    Size::Size(unsigned int width, unsigned int height) : m_width{width}, m_height{height}
     {
     }
 
-    int Size::width() const noexcept
+    unsigned int Size::width() const noexcept
     {
         return m_width;
     }
 
-    int Size::height() const noexcept
+    unsigned int Size::height() const noexcept
     {
         return m_height;
     }
@@ -26,12 +29,16 @@ namespace watermark
 
     Size Size::operator-(const Point &point)
     {
+        if ((m_width < point.m_x) || (m_height < point.m_y))
+        {
+            throw Size_exception("Cannot subtract point from size as it will result in negative dimenstion(s).");
+        }
         return Size{m_width - point.m_x, m_height - point.m_y};
     }
 
     bool Size::is_empty() const noexcept
     {
-        return (m_height <= 0 || m_width <= 0);
+        return (m_height == 0U || m_width == 0U);
     }
 
     bool Size::fits_in(const Size &size) const noexcept
