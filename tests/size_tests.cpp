@@ -3,12 +3,14 @@
 #include <exception.h>
 
 #include <gmock/gmock.h>
+#include <limits>
 
 namespace watermark
 {
 
     namespace test
     {
+        constexpr const unsigned int MAX_UNSIGNED_INT = std::numeric_limits<unsigned int>::max();
 
         TEST(Size_test, check_default_ctor)
         {
@@ -71,37 +73,48 @@ namespace watermark
                 std::make_tuple(Size{11, 15}, Size{10, 15}, false, false),
                 std::make_tuple(Size{111, 111}, Size{999, 999}, false, true)));
 
-        using Size_add_point_test_params = std::tuple<Size, Point, Size>;
+        using Size_add_point_test_params = std::tuple<Size, Point, Size, bool>;
         class Size_add_point_test : public ::testing::TestWithParam<Size_add_point_test_params>
         {
         };
 
         TEST_P(Size_add_point_test, check_add_point)
         {
-            const auto &[input_size, point, output_size] = GetParam();
+            const auto &[input_size, point, output_size, is_exception] = GetParam();
 
-            ASSERT_EQ(input_size + point, output_size);
+            if (is_exception)
+            {
+                ASSERT_THROW(input_size + point, Size_exception);
+            }
+            else
+            {
+                ASSERT_EQ(input_size + point, output_size);
+            }
         }
 
         INSTANTIATE_TEST_CASE_P(
             Size_test,
             Size_add_point_test,
             ::testing::Values(
-                std::make_tuple(Size{}, Point{}, Size{}),
-                std::make_tuple(Size{0U, 0U}, Point{1U, 1U}, Size{1U, 1U}),
-                std::make_tuple(Size{0U, 5U}, Point{1U, 0U}, Size{1U, 5U}),
-                std::make_tuple(Size{5U, 0U}, Point{0U, 1U}, Size{5U, 1U}),
-                std::make_tuple(Size{10U, 10U}, Point{0U, 0U}, Size{10U, 10U}),
-                std::make_tuple(Size{10U, 10U}, Point{5U, 0U}, Size{15U, 10U}),
-                std::make_tuple(Size{5U, 3U}, Point{0U, 2U}, Size{5U, 5U}),
-                std::make_tuple(Size{999U, 1234U}, Point{100U, 200U}, Size{1099U, 1434U})));
+                std::make_tuple(Size{}, Point{}, Size{}, false),
+                std::make_tuple(Size{0U, 0U}, Point{1U, 1U}, Size{1U, 1U}, false),
+                std::make_tuple(Size{0U, 5U}, Point{1U, 0U}, Size{1U, 5U}, false),
+                std::make_tuple(Size{5U, 0U}, Point{0U, 1U}, Size{5U, 1U}, false),
+                std::make_tuple(Size{10U, 10U}, Point{0U, 0U}, Size{10U, 10U}, false),
+                std::make_tuple(Size{10U, 10U}, Point{5U, 0U}, Size{15U, 10U}, false),
+                std::make_tuple(Size{5U, 3U}, Point{0U, 2U}, Size{5U, 5U}, false),
+                std::make_tuple(Size{999U, 1234U}, Point{100U, 200U}, Size{1099U, 1434U}, false),
+                std::make_tuple(Size{MAX_UNSIGNED_INT, MAX_UNSIGNED_INT}, Point{0U, 0U}, Size{MAX_UNSIGNED_INT, MAX_UNSIGNED_INT}, false),
+                std::make_tuple(Size{1U, MAX_UNSIGNED_INT}, Point{1U, 1U}, Size{}, true),
+                std::make_tuple(Size{MAX_UNSIGNED_INT, 1U}, Point{1U, 1U}, Size{}, true),
+                std::make_tuple(Size{MAX_UNSIGNED_INT, MAX_UNSIGNED_INT}, Point{1U, 1U}, Size{}, true)));
 
-        using Size_rem_point_test_params = std::tuple<Size, Point, Size, bool>;
-        class Size_rem_point_test : public ::testing::TestWithParam<Size_rem_point_test_params>
+        using Size_sub_point_test_params = std::tuple<Size, Point, Size, bool>;
+        class Size_sub_point_test : public ::testing::TestWithParam<Size_sub_point_test_params>
         {
         };
 
-        TEST_P(Size_rem_point_test, check_remove_point)
+        TEST_P(Size_sub_point_test, check_subtract_point)
         {
             const auto &[input_size, point, output_size, is_exception] = GetParam();
 
@@ -117,12 +130,12 @@ namespace watermark
 
         INSTANTIATE_TEST_CASE_P(
             Size_test,
-            Size_rem_point_test,
+            Size_sub_point_test,
             ::testing::Values(
                 std::make_tuple(Size{}, Point{}, Size{}, false),
-                std::make_tuple(Size{0U, 0U}, Point{1U, 1U}, Size{0U, 0U}, true),
-                std::make_tuple(Size{0U, 5U}, Point{1U, 0U}, Size{0U, 0U}, true),
-                std::make_tuple(Size{5U, 0U}, Point{0U, 1U}, Size{0U, 0U}, true),
+                std::make_tuple(Size{0U, 0U}, Point{1U, 1U}, Size{}, true),
+                std::make_tuple(Size{0U, 5U}, Point{1U, 0U}, Size{}, true),
+                std::make_tuple(Size{5U, 0U}, Point{0U, 1U}, Size{}, true),
                 std::make_tuple(Size{10U, 10U}, Point{0U, 0U}, Size{10U, 10U}, false),
                 std::make_tuple(Size{10U, 10U}, Point{5U, 0U}, Size{5U, 10U}, false),
                 std::make_tuple(Size{5U, 3U}, Point{0U, 2U}, Size{5U, 1U}, false),

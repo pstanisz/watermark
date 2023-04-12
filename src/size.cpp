@@ -24,6 +24,11 @@ namespace watermark
 
     Size Size::operator+(const Point &point) const
     {
+        if ((std::numeric_limits<unsigned int>::max() - m_width < point.m_x) ||
+            (std::numeric_limits<unsigned int>::max() - m_height < point.m_y))
+        {
+            throw Size_exception("Cannot add point to size as it will result in overflow.");
+        }
         return Size{m_width + point.m_x, m_height + point.m_y};
     }
 
