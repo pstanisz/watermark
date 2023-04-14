@@ -6,6 +6,7 @@
 #include <iostream>
 #include <string>
 #include <getopt.h>
+#include <filesystem>
 
 static struct option long_options[] = {
     {"mark", required_argument, nullptr, 0},
@@ -72,6 +73,16 @@ try
             output_dir = optarg;
         }
     }
+
+    //TODO: generic checker
+    std::filesystem::path mark_path{mark_file};
+    if (!std::filesystem::exists(mark_path)) {
+        throw std::invalid_argument(std::string("Mark file does not exist under: ").append(mark_path));
+    }
+    if (!std::filesystem::is_regular_file(mark_path)) {
+        throw std::invalid_argument(std::string("Mark file is not a regular file: ").append(mark_path));
+    }
+    //TODO: check if mark is an image
 
     std::cout << "Mark file: " << mark_file << std::endl;
     std::cout << "Source file: " << source_file << std::endl;
