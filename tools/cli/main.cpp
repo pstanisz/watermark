@@ -10,7 +10,9 @@
 static struct option long_options[] = {
     {"mark", required_argument, nullptr, 0},
     {"source", required_argument, nullptr, 0},
+    {"source_dir", required_argument, nullptr, 0},
     {"output", required_argument, nullptr, 0},
+    {"output_dir", required_argument, nullptr, 0},
     {"help", no_argument, nullptr, 0},
     {0, 0, 0, 0}};
 
@@ -26,6 +28,8 @@ try
     std::string mark_file{};
     std::string source_file{};
     std::string output_file{};
+    std::string source_dir{};
+    std::string output_dir{};
 
     while ((option_id = getopt_long(argc, argv, "",
                                     long_options, &option_index)) != -1)
@@ -57,11 +61,38 @@ try
         {
             output_file = optarg;
         }
+
+        if (option_name == "source_dir")
+        {
+            source_dir = optarg;
+        }
+
+        if (option_name == "output_dir")
+        {
+            output_dir = optarg;
+        }
     }
 
     std::cout << "Mark file: " << mark_file << std::endl;
     std::cout << "Source file: " << source_file << std::endl;
     std::cout << "Output file: " << output_file << std::endl;
+    std::cout << "Source dir: " << source_dir << std::endl;
+    std::cout << "Output dir: " << output_dir << std::endl;
+
+    if (mark_file.empty())
+    {
+        throw std::invalid_argument("Mark file is required");
+    }
+
+    if (source_file.empty() && source_dir.empty())
+    {
+        throw std::invalid_argument("Source file or directory is required");
+    }
+
+    if (output_file.empty() && output_dir.empty())
+    {
+        throw std::invalid_argument("Output file or directory is required");
+    }
 
     watermark::Image logo{mark_file};
     watermark::Image img{source_file};
