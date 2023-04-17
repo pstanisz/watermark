@@ -10,6 +10,11 @@
 
 namespace watermark
 {
+    bool Image::is_image(const std::string &file_path)
+    {
+        return Image_impl::is_image(file_path);
+    }
+
 
     Image::Image(const std::string &img_path) : m_impl{new Image_impl(img_path)}
     {

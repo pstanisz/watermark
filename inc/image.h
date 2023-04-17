@@ -17,6 +17,9 @@ namespace watermark
     class Image
     {
     public:
+        static bool is_image(const std::string &file_path);
+        
+    public:
         explicit Image(const std::string &img_path);
         explicit Image(const Size &img_size);
         ~Image() noexcept;

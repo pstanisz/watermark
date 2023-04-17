@@ -14,6 +14,9 @@ namespace watermark
     class Image_impl
     {
     public:
+        static bool is_image(const std::string &file_path);
+        
+    public:
         explicit Image_impl(const std::string &img_path);
         explicit Image_impl(const Size &img_size);
         explicit Image_impl(const cv::Mat &mat);

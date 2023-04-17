@@ -12,6 +12,12 @@
 
 namespace watermark
 {
+    bool Image_impl::is_image(const std::string &file_path)
+    {
+        auto mat = cv::imread(file_path, 0);
+        
+        return !mat.empty();
+    }
 
     Image_impl::Image_impl(const std::string &img_path) : m_matrix{cv::imread(img_path, cv::IMREAD_COLOR)}
     {
