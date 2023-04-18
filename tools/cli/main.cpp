@@ -18,6 +18,7 @@ namespace
         {"source_dir", required_argument, nullptr, 0},
         {"output", required_argument, nullptr, 0},
         {"output_dir", required_argument, nullptr, 0},
+        {"layout", required_argument, nullptr, 0},
         {"help", no_argument, nullptr, 0},
         {0, 0, 0, 0}};
 
@@ -59,6 +60,7 @@ try
     std::string output_file{};
     std::string source_dir{};
     std::string output_dir{};
+    watermark::Layout layout{watermark::Layout::Center};
 
     while ((option_id = getopt_long(argc, argv, "",
                                     long_options, &option_index)) != -1)
@@ -99,6 +101,12 @@ try
         if (option_name == "output_dir")
         {
             output_dir = optarg;
+        }
+
+        if (option_name == "layout")
+        {
+            //TODO: parse layout
+            layout = watermark::Layout::Center;
         }
     }
 
