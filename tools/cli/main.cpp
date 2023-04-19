@@ -9,6 +9,7 @@
 #include <getopt.h>
 #include <filesystem>
 #include <vector>
+#include <regex>
 
 namespace
 {
@@ -22,12 +23,14 @@ namespace
     const std::string BOTTOM_MID = "bottom-mid";
     const std::string BOTTOM_RIGHT = "bottom-right";
 
+    static const char *short_options = "h";
     static struct option long_options[] = {
         {"mark", required_argument, nullptr, 0},
-        {"source", required_argument, nullptr, 0},
-        {"source_dir", required_argument, nullptr, 0},
-        {"output", required_argument, nullptr, 0},
-        {"output_dir", required_argument, nullptr, 0},
+        {"mark_size", required_argument, nullptr, 0},
+        {"src", required_argument, nullptr, 0},
+        {"src_dir", required_argument, nullptr, 0},
+        {"out", required_argument, nullptr, 0},
+        {"out_dir", required_argument, nullptr, 0},
         {"layout", required_argument, nullptr, 0},
         {"opacity", required_argument, nullptr, 0},
         {"help", no_argument, nullptr, 0},
@@ -139,10 +142,11 @@ try
     std::string output_file{};
     std::string source_dir{};
     std::string output_dir{};
+    watermark::Size mark_size{};
     watermark::Layout layout{watermark::Layout::Center};
     watermark::Opacity opacity{0.5f};
 
-    while ((option_id = getopt_long(argc, argv, "",
+    while ((option_id = getopt_long(argc, argv, short_options,
                                     long_options, &option_index)) != -1)
     {
         if (option_id == '?')
@@ -152,9 +156,9 @@ try
 
         const std::string option_name{long_options[option_index].name};
 
-        if (option_name == "help")
+        if (option_name == "help" || option_name == "h")
         {
-            std::cout << "watermark_cli\n";
+            std::cout << "watermark_cli help\n";
             return EXIT_SUCCESS;
         }
 
@@ -163,22 +167,39 @@ try
             mark_file = optarg;
         }
 
-        if (option_name == "source")
+        if (option_name == "mark_size")
+        {
+            // TODO: split --mark_size 100,100
+            // mark_size = optarg;
+            std::smatch matches;
+            const std::regex size_expr("^([0-9]+),([0-9]+)");
+            std::string in(optarg);
+            if (std::regex_search(in, matches, size_expr))
+            {
+                mark_size = watermark::Size{std::stoul(matches[1]), std::stoul(matches[2])};
+            }
+            else
+            {
+                throw std::invalid_argument(std::string("Cannot recognize mark size: ").append(in));
+            }
+        }
+
+        if (option_name == "src")
         {
             source_file = optarg;
         }
 
-        if (option_name == "output")
+        if (option_name == "out")
         {
             output_file = optarg;
         }
 
-        if (option_name == "source_dir")
+        if (option_name == "src_dir")
         {
             source_dir = optarg;
         }
 
-        if (option_name == "output_dir")
+        if (option_name == "out_dir")
         {
             output_dir = optarg;
         }
@@ -228,7 +249,7 @@ try
     watermark::Image img{source_file};
 
     watermark::Watermark mark{std::move(logo)};
-    auto result = mark.apply_to(img, layout, opacity);
+    auto result = mark.apply_to(img, layout, mark_size, opacity);
     result.save(output_file);
 
     return EXIT_SUCCESS;
