@@ -12,6 +12,15 @@
 
 namespace
 {
+    const std::string TOP_LEFT = "top-left";
+    const std::string TOP_MID = "top-mid";
+    const std::string TOP_RIGHT = "top-right";
+    const std::string MID_LEFT = "middle-left";
+    const std::string CENTER = "center";
+    const std::string MID_RIGHT = "middle-right";
+    const std::string BOTTOM_LEFT = "bottom-left";
+    const std::string BOTTOM_MID = "bottom-mid";
+    const std::string BOTTOM_RIGHT = "bottom-right";
 
     static struct option long_options[] = {
         {"mark", required_argument, nullptr, 0},
@@ -20,6 +29,7 @@ namespace
         {"output", required_argument, nullptr, 0},
         {"output_dir", required_argument, nullptr, 0},
         {"layout", required_argument, nullptr, 0},
+        {"opacity", required_argument, nullptr, 0},
         {"help", no_argument, nullptr, 0},
         {0, 0, 0, 0}};
 
@@ -67,6 +77,52 @@ namespace
         return images;
     }
 
+    watermark::Layout to_layout(const std::string &arg)
+    {
+        using watermark::Layout;
+
+        if (arg == TOP_LEFT)
+        {
+            return Layout::Top_left;
+        }
+        else if (arg == TOP_MID)
+        {
+            return Layout::Top_middle;
+        }
+        else if (arg == TOP_RIGHT)
+        {
+            return Layout::Top_right;
+        }
+        else if (arg == MID_LEFT)
+        {
+            return Layout::Middle_left;
+        }
+        else if (arg == CENTER)
+        {
+            return Layout::Center;
+        }
+        else if (arg == MID_RIGHT)
+        {
+            return Layout::Middle_right;
+        }
+        else if (arg == BOTTOM_LEFT)
+        {
+            return Layout::Bottom_left;
+        }
+        else if (arg == BOTTOM_MID)
+        {
+            return Layout::Bottom_middle;
+        }
+        else if (arg == BOTTOM_RIGHT)
+        {
+            return Layout::Bottom_right;
+        }
+        else
+        {
+            throw std::invalid_argument(std::string("Unrecognized layout: ").append(arg));
+        }
+    }
+
 }
 
 int main(int argc, char *argv[])
@@ -84,6 +140,7 @@ try
     std::string source_dir{};
     std::string output_dir{};
     watermark::Layout layout{watermark::Layout::Center};
+    watermark::Opacity opacity{0.5f};
 
     while ((option_id = getopt_long(argc, argv, "",
                                     long_options, &option_index)) != -1)
@@ -128,8 +185,12 @@ try
 
         if (option_name == "layout")
         {
-            // TODO: parse layout
-            layout = watermark::Layout::Center;
+            layout = to_layout(optarg);
+        }
+
+        if (option_name == "opacity")
+        {
+            opacity = std::stof(optarg);
         }
     }
 
@@ -167,7 +228,7 @@ try
     watermark::Image img{source_file};
 
     watermark::Watermark mark{std::move(logo)};
-    auto result = mark.apply_to(img, watermark::Layout::Center, 0.4f);
+    auto result = mark.apply_to(img, layout, opacity);
     result.save(output_file);
 
     return EXIT_SUCCESS;
