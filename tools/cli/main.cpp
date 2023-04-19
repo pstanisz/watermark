@@ -8,6 +8,7 @@
 #include <string>
 #include <getopt.h>
 #include <filesystem>
+#include <vector>
 
 namespace
 {
@@ -32,16 +33,38 @@ namespace
         std::filesystem::path mark_path{file_path};
         if (!std::filesystem::exists(mark_path))
         {
-            throw std::invalid_argument(std::string("Not existing file: ").append(file_path));
+            throw std::invalid_argument(std::string("File does not exist: ").append(file_path));
         }
         if (!std::filesystem::is_regular_file(mark_path))
         {
-            throw std::invalid_argument(std::string("Non-regular file: ").append(file_path));
+            throw std::invalid_argument(std::string("File is not regular ").append(file_path));
         }
         if (!watermark::Image::is_image(file_path))
         {
-            throw std::invalid_argument(std::string("Unsupported file: ").append(file_path));
+            throw std::invalid_argument(std::string("File is not an image: ").append(file_path));
         }
+    }
+
+    std::vector<std::string> find_images_in_dir(const std::string &dir)
+    {
+        std::vector<std::string> images;
+
+        std::filesystem::path dir_path{dir};
+        if (!std::filesystem::exists(dir_path))
+        {
+            throw std::invalid_argument(std::string("Directory does not exist: ").append(dir_path));
+        }
+        if (!std::filesystem::is_directory(dir_path))
+        {
+            throw std::invalid_argument(std::string("Not a directory: ").append(dir_path));
+        }
+
+        for (const auto &entry : std::filesystem::directory_iterator(dir_path))
+        {
+            std::cout << entry << std::endl;
+        }
+
+        return images;
     }
 
 }
@@ -105,7 +128,7 @@ try
 
         if (option_name == "layout")
         {
-            //TODO: parse layout
+            // TODO: parse layout
             layout = watermark::Layout::Center;
         }
     }
@@ -129,6 +152,12 @@ try
     if (output_file.empty() && output_dir.empty())
     {
         throw std::invalid_argument("Output file or directory is required");
+    }
+
+    if (!source_dir.empty())
+    {
+        // TODO:
+        find_images_in_dir(source_dir);
     }
 
     validate_image_file(mark_file);
