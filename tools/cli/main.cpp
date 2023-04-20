@@ -13,6 +13,17 @@
 
 namespace
 {
+    // Arguments
+    const char MARK_ARG[] = "mark";
+    const char MARK_SIZE_ARG[] = "mark_size";
+    const char SRC_ARG[] = "src";
+    const char SRC_DIR_ARG[] = "src_dir";
+    const char OUT_ARG[] = "out";
+    const char OUT_DIR_ARG[] = "out_dir";
+    const char LAYOUT_ARG[] = "layout";
+    const char OPACITY_ARG[] = "opacity";
+    const char HELP_ARG[] = "help";
+
     const std::string TOP_LEFT = "top-left";
     const std::string TOP_MID = "top-mid";
     const std::string TOP_RIGHT = "top-right";
@@ -25,15 +36,15 @@ namespace
 
     static const char *short_options = "h";
     static struct option long_options[] = {
-        {"mark", required_argument, nullptr, 0},
-        {"mark_size", required_argument, nullptr, 0},
-        {"src", required_argument, nullptr, 0},
-        {"src_dir", required_argument, nullptr, 0},
-        {"out", required_argument, nullptr, 0},
-        {"out_dir", required_argument, nullptr, 0},
-        {"layout", required_argument, nullptr, 0},
-        {"opacity", required_argument, nullptr, 0},
-        {"help", no_argument, nullptr, 0},
+        {MARK_ARG, required_argument, nullptr, 0},
+        {MARK_SIZE_ARG, required_argument, nullptr, 0},
+        {SRC_ARG, required_argument, nullptr, 0},
+        {SRC_DIR_ARG, required_argument, nullptr, 0},
+        {OUT_ARG, required_argument, nullptr, 0},
+        {OUT_DIR_ARG, required_argument, nullptr, 0},
+        {LAYOUT_ARG, required_argument, nullptr, 0},
+        {OPACITY_ARG, required_argument, nullptr, 0},
+        {HELP_ARG, no_argument, nullptr, 0},
         {0, 0, 0, 0}};
 
     void validate_image_file(const std::string &file_path)
@@ -56,6 +67,23 @@ namespace
         {
             throw std::invalid_argument(std::string("File is not an image: ").append(file_path));
         }
+    }
+
+    std::string create_out_file(const std::string& src)
+    {
+        namespace fs = std::filesystem;
+
+        fs::path src_path{src};
+        auto filename = src_path.filename().replace_extension("");
+        auto extension = src_path.extension();
+
+        src_path.remove_filename();
+        src_path += filename;
+        src_path += "_marked";
+        src_path += extension;
+
+        return src_path;
+
     }
 
     std::vector<std::string> find_images_in_dir(const std::string &dir)
@@ -156,21 +184,19 @@ try
 
         const std::string option_name{long_options[option_index].name};
 
-        if (option_name == "help" || option_name == "h")
+        if (option_name == HELP_ARG || option_name == "h")
         {
             std::cout << "watermark_cli help\n";
             return EXIT_SUCCESS;
         }
 
-        if (option_name == "mark")
+        if (option_name == MARK_ARG)
         {
             mark_file = optarg;
         }
 
-        if (option_name == "mark_size")
+        if (option_name == MARK_SIZE_ARG)
         {
-            // TODO: split --mark_size 100,100
-            // mark_size = optarg;
             std::smatch matches;
             const std::regex size_expr("^([0-9]+),([0-9]+)");
             std::string in(optarg);
@@ -184,32 +210,32 @@ try
             }
         }
 
-        if (option_name == "src")
+        if (option_name == SRC_ARG)
         {
             source_file = optarg;
         }
 
-        if (option_name == "out")
+        if (option_name == OUT_ARG)
         {
             output_file = optarg;
         }
 
-        if (option_name == "src_dir")
+        if (option_name == SRC_DIR_ARG)
         {
             source_dir = optarg;
         }
 
-        if (option_name == "out_dir")
+        if (option_name == OUT_DIR_ARG)
         {
             output_dir = optarg;
         }
 
-        if (option_name == "layout")
+        if (option_name == LAYOUT_ARG)
         {
             layout = to_layout(optarg);
         }
 
-        if (option_name == "opacity")
+        if (option_name == OPACITY_ARG)
         {
             opacity = std::stof(optarg);
         }
@@ -220,6 +246,9 @@ try
     std::cout << "Output file: " << output_file << std::endl;
     std::cout << "Source dir: " << source_dir << std::endl;
     std::cout << "Output dir: " << output_dir << std::endl;
+    std::cout << "Layout: " << static_cast<int>(layout) << std::endl;
+    std::cout << "Opacity: " << opacity << std::endl;
+    std::cout << "Size: " << mark_size.width() << "x" << mark_size.height() << std::endl;
 
     if (mark_file.empty())
     {
@@ -229,11 +258,6 @@ try
     if (source_file.empty() && source_dir.empty())
     {
         throw std::invalid_argument("Source file or directory is required");
-    }
-
-    if (output_file.empty() && output_dir.empty())
-    {
-        throw std::invalid_argument("Output file or directory is required");
     }
 
     if (!source_dir.empty())
@@ -247,6 +271,15 @@ try
 
     watermark::Image logo{mark_file};
     watermark::Image img{source_file};
+
+    // If the size of mark is not set explicitly - use original mark size
+    if (mark_size.is_empty()) {
+        mark_size = logo.size();
+    }
+
+    if (output_file.empty()) {
+        output_file = create_out_file(source_file);
+    }
 
     watermark::Watermark mark{std::move(logo)};
     auto result = mark.apply_to(img, layout, mark_size, opacity);
