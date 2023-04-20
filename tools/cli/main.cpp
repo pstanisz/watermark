@@ -193,6 +193,7 @@ try
         if (option_name == MARK_ARG)
         {
             mark_file = optarg;
+            validate_image_file(mark_file);
         }
 
         if (option_name == MARK_SIZE_ARG)
@@ -213,6 +214,7 @@ try
         if (option_name == SRC_ARG)
         {
             source_file = optarg;
+            validate_image_file(source_file);
         }
 
         if (option_name == OUT_ARG)
@@ -265,9 +267,6 @@ try
         // TODO:
         find_images_in_dir(source_dir);
     }
-
-    validate_image_file(mark_file);
-    validate_image_file(source_file);
 
     watermark::Image logo{mark_file};
     watermark::Image img{source_file};
