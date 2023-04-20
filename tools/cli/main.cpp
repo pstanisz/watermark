@@ -69,7 +69,7 @@ namespace
         }
     }
 
-    std::string create_out_file(const std::string& src)
+    std::string create_out_file(const std::string &src, const std::string& output_dir = "")
     {
         namespace fs = std::filesystem;
 
@@ -77,13 +77,19 @@ namespace
         auto filename = src_path.filename().replace_extension("");
         auto extension = src_path.extension();
 
-        src_path.remove_filename();
-        src_path += filename;
-        src_path += "_marked";
-        src_path += extension;
+        fs::path out_path{};
+        if (output_dir.empty()) {
+            out_path = src_path.remove_filename();
+        }
+        else {
+            out_path = fs::path(output_dir);
+        }
 
-        return src_path;
+        out_path += filename;
+        out_path += "_marked";
+        out_path += extension;
 
+        return out_path;
     }
 
     std::vector<std::string> find_images_in_dir(const std::string &dir)
@@ -243,15 +249,6 @@ try
         }
     }
 
-    std::cout << "Mark file: " << mark_file << std::endl;
-    std::cout << "Source file: " << source_file << std::endl;
-    std::cout << "Output file: " << output_file << std::endl;
-    std::cout << "Source dir: " << source_dir << std::endl;
-    std::cout << "Output dir: " << output_dir << std::endl;
-    std::cout << "Layout: " << static_cast<int>(layout) << std::endl;
-    std::cout << "Opacity: " << opacity << std::endl;
-    std::cout << "Size: " << mark_size.width() << "x" << mark_size.height() << std::endl;
-
     if (mark_file.empty())
     {
         throw std::invalid_argument("Mark file is required");
@@ -259,7 +256,17 @@ try
 
     if (source_file.empty() && source_dir.empty())
     {
-        throw std::invalid_argument("Source file or directory is required");
+        throw std::invalid_argument(std::string(SRC_ARG).append(" or ").append(SRC_DIR_ARG).append(" is required"));
+    }
+
+    if (!source_file.empty() && !source_dir.empty())
+    {
+        throw std::invalid_argument(std::string("Cannot use both: ").append(SRC_ARG).append(" and ").append(SRC_DIR_ARG));
+    }
+
+    if (!output_file.empty() && !output_dir.empty())
+    {
+        throw std::invalid_argument(std::string("Cannot use both: ").append(OUT_ARG).append(" and ").append(OUT_DIR_ARG));
     }
 
     if (!source_dir.empty())
@@ -272,13 +279,24 @@ try
     watermark::Image img{source_file};
 
     // If the size of mark is not set explicitly - use original mark size
-    if (mark_size.is_empty()) {
+    if (mark_size.is_empty())
+    {
         mark_size = logo.size();
     }
 
-    if (output_file.empty()) {
-        output_file = create_out_file(source_file);
+    if (output_file.empty())
+    {
+        output_file = create_out_file(source_file, output_dir);
     }
+
+    std::cout << "Mark file: " << mark_file << std::endl;
+    std::cout << "Source file: " << source_file << std::endl;
+    std::cout << "Output file: " << output_file << std::endl;
+    std::cout << "Source dir: " << source_dir << std::endl;
+    std::cout << "Output dir: " << output_dir << std::endl;
+    std::cout << "Layout: " << static_cast<int>(layout) << std::endl;
+    std::cout << "Opacity: " << opacity << std::endl;
+    std::cout << "Size: " << mark_size.width() << "x" << mark_size.height() << std::endl;
 
     watermark::Watermark mark{std::move(logo)};
     auto result = mark.apply_to(img, layout, mark_size, opacity);
