@@ -69,7 +69,7 @@ namespace
         }
     }
 
-    std::string create_out_file(const std::string &src, const std::string& output_dir = "")
+    std::string create_out_file(const std::string &src, const std::string &output_dir = "")
     {
         namespace fs = std::filesystem;
 
@@ -78,10 +78,12 @@ namespace
         auto extension = src_path.extension();
 
         fs::path out_path{};
-        if (output_dir.empty()) {
+        if (output_dir.empty())
+        {
             out_path = src_path.remove_filename();
         }
-        else {
+        else
+        {
             out_path = fs::path(output_dir);
         }
 
@@ -109,6 +111,11 @@ namespace
         for (const auto &entry : std::filesystem::directory_iterator(dir_path))
         {
             std::cout << entry << std::endl;
+            const auto &path = entry.path();
+            if (watermark::Image::is_image(path))
+            {
+                images.push_back(path);
+            }
         }
 
         return images;
@@ -269,38 +276,58 @@ try
         throw std::invalid_argument(std::string("Cannot use both: ").append(OUT_ARG).append(" and ").append(OUT_DIR_ARG));
     }
 
-    if (!source_dir.empty())
-    {
-        // TODO:
-        find_images_in_dir(source_dir);
-    }
-
     watermark::Image logo{mark_file};
-    watermark::Image img{source_file};
-
-    // If the size of mark is not set explicitly - use original mark size
     if (mark_size.is_empty())
     {
         mark_size = logo.size();
     }
 
-    if (output_file.empty())
+    if (!source_dir.empty())
     {
-        output_file = create_out_file(source_file, output_dir);
+        auto image_paths = find_images_in_dir(source_dir);
+        watermark::Watermark mark{std::move(logo)};
+
+        for (const auto &image : image_paths)
+        {
+            watermark::Image img{image};
+
+            output_file = create_out_file(image, output_dir);
+
+            std::cout << "Mark file: " << mark_file << std::endl;
+            std::cout << "Source file: " << image << std::endl;
+            std::cout << "Output file: " << output_file << std::endl;
+            std::cout << "Source dir: " << source_dir << std::endl;
+            std::cout << "Output dir: " << output_dir << std::endl;
+            std::cout << "Layout: " << static_cast<int>(layout) << std::endl;
+            std::cout << "Opacity: " << opacity << std::endl;
+            std::cout << "Size: " << mark_size.width() << "x" << mark_size.height() << std::endl;
+
+            auto result = mark.apply_to(img, layout, mark_size, opacity);
+            result.save(output_file);
+        }
     }
+    else
+    {
+        watermark::Image img{source_file};
 
-    std::cout << "Mark file: " << mark_file << std::endl;
-    std::cout << "Source file: " << source_file << std::endl;
-    std::cout << "Output file: " << output_file << std::endl;
-    std::cout << "Source dir: " << source_dir << std::endl;
-    std::cout << "Output dir: " << output_dir << std::endl;
-    std::cout << "Layout: " << static_cast<int>(layout) << std::endl;
-    std::cout << "Opacity: " << opacity << std::endl;
-    std::cout << "Size: " << mark_size.width() << "x" << mark_size.height() << std::endl;
+        if (output_file.empty())
+        {
+            output_file = create_out_file(source_file, output_dir);
+        }
 
-    watermark::Watermark mark{std::move(logo)};
-    auto result = mark.apply_to(img, layout, mark_size, opacity);
-    result.save(output_file);
+        std::cout << "Mark file: " << mark_file << std::endl;
+        std::cout << "Source file: " << source_file << std::endl;
+        std::cout << "Output file: " << output_file << std::endl;
+        std::cout << "Source dir: " << source_dir << std::endl;
+        std::cout << "Output dir: " << output_dir << std::endl;
+        std::cout << "Layout: " << static_cast<int>(layout) << std::endl;
+        std::cout << "Opacity: " << opacity << std::endl;
+        std::cout << "Size: " << mark_size.width() << "x" << mark_size.height() << std::endl;
+
+        watermark::Watermark mark{std::move(logo)};
+        auto result = mark.apply_to(img, layout, mark_size, opacity);
+        result.save(output_file);
+    }
 
     return EXIT_SUCCESS;
 }
