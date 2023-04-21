@@ -24,6 +24,7 @@ namespace
     const char OPACITY_ARG[] = "opacity";
     const char HELP_ARG[] = "help";
 
+    // Layout arguments
     const std::string TOP_LEFT = "top-left";
     const std::string TOP_MID = "top-mid";
     const std::string TOP_RIGHT = "top-right";
@@ -34,6 +35,7 @@ namespace
     const std::string BOTTOM_MID = "bottom-mid";
     const std::string BOTTOM_RIGHT = "bottom-right";
 
+    // Options
     static const char *short_options = "h";
     static struct option long_options[] = {
         {MARK_ARG, required_argument, nullptr, 0},
@@ -46,6 +48,16 @@ namespace
         {OPACITY_ARG, required_argument, nullptr, 0},
         {HELP_ARG, no_argument, nullptr, 0},
         {0, 0, 0, 0}};
+
+    void print_help()
+    {
+        std::cout << "watermark cli\n";
+        std::cout << "Usage 1:\n";
+        std::cout << "watermark_cli --" << MARK_ARG << " <mark_image> --" << SRC_ARG << " <image_to_be_marked> --"
+                  << OUT_ARG << " <output_image> --" << LAYOUT_ARG << " <layout> --" << MARK_SIZE_ARG << " <mark_size> --"
+                  << OPACITY_ARG << " <opacity>\n";
+        std::cout << "\nApplication takes an input watermark image and applies the watermark for the source image or images which are found in the directory specified by the user.\n";
+    }
 
     void validate_image_file(const std::string &file_path)
     {
@@ -199,7 +211,7 @@ try
 
         if (option_name == HELP_ARG || option_name == "h")
         {
-            std::cout << "watermark_cli help\n";
+            print_help();
             return EXIT_SUCCESS;
         }
 
