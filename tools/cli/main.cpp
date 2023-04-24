@@ -235,8 +235,8 @@ try
     std::string source_dir{};
     std::string output_dir{};
     watermark::Size mark_size{};
-    watermark::Layout layout{watermark::Layout::Center};
-    watermark::Opacity opacity{0.5f};
+    watermark::Layout layout = to_layout(DEFAULT_LAYOUT);
+    watermark::Opacity opacity{DEFAULT_OPACITY};
 
     while ((option_id = getopt_long(argc, argv, short_options,
                                     long_options, &option_index)) != -1)
