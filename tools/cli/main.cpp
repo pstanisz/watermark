@@ -10,12 +10,24 @@
 #include <filesystem>
 #include <vector>
 #include <regex>
+#include <sstream>
 
 namespace
 {
+    // Version
+    const uint8_t MAJOR_VERSION{0};
+    const uint8_t MINOR_VERSION{1};
+
+    std::string app_version()
+    {
+        std::stringstream ss;
+        ss << static_cast<int>(MAJOR_VERSION) << "." << static_cast<int>(MINOR_VERSION);
+        return ss.str();
+    }
+
     // Arguments
     const char MARK_ARG[] = "mark";
-    const char MARK_SIZE_ARG[] = "mark_size";
+    const char MARK_SIZE_ARG[] = "size";
     const char SRC_ARG[] = "src";
     const char SRC_DIR_ARG[] = "src_dir";
     const char OUT_ARG[] = "out";
@@ -49,14 +61,43 @@ namespace
         {HELP_ARG, no_argument, nullptr, 0},
         {0, 0, 0, 0}};
 
+    // Defaults
+    const std::string DEFAULT_LAYOUT {BOTTOM_RIGHT};
+    const watermark::Opacity DEFAULT_OPACITY {0.5f};
+
     void print_help()
     {
-        std::cout << "watermark cli\n";
-        std::cout << "Usage 1:\n";
-        std::cout << "watermark_cli --" << MARK_ARG << " <mark_image> --" << SRC_ARG << " <image_to_be_marked> --"
+        std::cout << "watermark cli, " << app_version() << "\n";
+        std::cout << "\nApplication takes an input watermark image and applies the watermark for the source image or images which are found in the directory specified by the user.\n";
+
+        std::cout << "\nUsage 1:\n";
+        std::cout << "\twatermark_cli --" << MARK_ARG << " <mark> --" << SRC_ARG << " <image> --"
                   << OUT_ARG << " <output_image> --" << LAYOUT_ARG << " <layout> --" << MARK_SIZE_ARG << " <mark_size> --"
                   << OPACITY_ARG << " <opacity>\n";
-        std::cout << "\nApplication takes an input watermark image and applies the watermark for the source image or images which are found in the directory specified by the user.\n";
+
+        std::cout << "\nUsage 2:\n";
+        std::cout << "\twatermark_cli --" << MARK_ARG << " <mark> --" << SRC_DIR_ARG << " <dir_with_images> --"
+                  << OUT_DIR_ARG << " <output_dir> --" << LAYOUT_ARG << " <layout> --" << MARK_SIZE_ARG << " <mark_size> --"
+                  << OPACITY_ARG << " <opacity>\n";
+
+        std::cout << "\nArguments:\n";
+        std::cout << "\t" << MARK_ARG << "\twatermark image to be applied (mandatory)\n";
+        std::cout << "\t" << SRC_ARG << "\tsource image to be watermarked (mandatory if " << SRC_DIR_ARG << " is not specified)\n";
+        std::cout << "\t" << SRC_DIR_ARG << "\tdirectory with images to be watermarked (mandatory if " << SRC_ARG << " is not specified)\n";
+        std::cout << "\t" << OUT_ARG << "\toutput file, where watermarked image will be saved (default: same as source with _marked postfix)\n";
+        std::cout << "\t" << OUT_DIR_ARG << "\toutput directory, where watermarked images will be saved\n";
+        std::cout << "\t" << LAYOUT_ARG << "\tlayout of watermark (default: " <<  DEFAULT_LAYOUT << ". Available layouts:\n";
+        std::cout << "\t\t" << TOP_LEFT << ", " << TOP_MID << ", " << TOP_RIGHT << ", "
+                  << MID_LEFT << ", " << CENTER << ", " << MID_RIGHT << ", "
+                  << BOTTOM_LEFT << ", " << BOTTOM_MID << ", " << BOTTOM_RIGHT << "\n";
+        std::cout << "\t" << MARK_SIZE_ARG << "\twatermark size expressed in pixels (default: original watermark size). Format:\n";
+        std::cout << "\t\t--" << MARK_SIZE_ARG << " width,height, i.e.: 100,100\n";
+        std::cout << "\t" << OPACITY_ARG << "\topacity of watermark (default: " << DEFAULT_OPACITY << ")\n";
+
+        std::cout << "\nSamples:\n";
+        std::cout << "\twatermark_cli --" << MARK_ARG << " /home/guest/logo.png --" << SRC_ARG << " /home/guest/mountains.png --"
+                  << OUT_ARG << " /home/guest/mountains_marked.png --" << LAYOUT_ARG << " center --" << MARK_SIZE_ARG << " 100,100 --"
+                  << OPACITY_ARG << " 0.8\n";
     }
 
     void validate_image_file(const std::string &file_path)
@@ -184,8 +225,6 @@ namespace
 int main(int argc, char *argv[])
 try
 {
-    std::cout << "watermark_cli\n";
-
     int option_index = 0;
     int option_id = 0;
     opterr = 0;
