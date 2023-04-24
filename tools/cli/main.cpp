@@ -35,6 +35,7 @@ namespace
     const char LAYOUT_ARG[] = "layout";
     const char OPACITY_ARG[] = "opacity";
     const char HELP_ARG[] = "help";
+    const char VERBOSE_ARG[] = "verbose";
 
     // Layout arguments
     const std::string TOP_LEFT = "top-left";
@@ -59,11 +60,12 @@ namespace
         {LAYOUT_ARG, required_argument, nullptr, 0},
         {OPACITY_ARG, required_argument, nullptr, 0},
         {HELP_ARG, no_argument, nullptr, 0},
+        {VERBOSE_ARG, no_argument, nullptr, 0},
         {0, 0, 0, 0}};
 
     // Defaults
-    const std::string DEFAULT_LAYOUT {BOTTOM_RIGHT};
-    const watermark::Opacity DEFAULT_OPACITY {0.5f};
+    const std::string DEFAULT_LAYOUT{BOTTOM_RIGHT};
+    const watermark::Opacity DEFAULT_OPACITY{0.5f};
 
     void print_help()
     {
@@ -86,13 +88,15 @@ namespace
         std::cout << "\t" << SRC_DIR_ARG << "\tdirectory with images to be watermarked (mandatory if " << SRC_ARG << " is not specified)\n";
         std::cout << "\t" << OUT_ARG << "\toutput file, where watermarked image will be saved (default: same as source with _marked postfix)\n";
         std::cout << "\t" << OUT_DIR_ARG << "\toutput directory, where watermarked images will be saved\n";
-        std::cout << "\t" << LAYOUT_ARG << "\tlayout of watermark (default: " <<  DEFAULT_LAYOUT << ". Available layouts:\n";
+        std::cout << "\t" << LAYOUT_ARG << "\tlayout of watermark (default: " << DEFAULT_LAYOUT << ". Available layouts:\n";
         std::cout << "\t\t" << TOP_LEFT << ", " << TOP_MID << ", " << TOP_RIGHT << ", "
                   << MID_LEFT << ", " << CENTER << ", " << MID_RIGHT << ", "
                   << BOTTOM_LEFT << ", " << BOTTOM_MID << ", " << BOTTOM_RIGHT << "\n";
         std::cout << "\t" << MARK_SIZE_ARG << "\twatermark size expressed in pixels (default: original watermark size). Format:\n";
         std::cout << "\t\t--" << MARK_SIZE_ARG << " width,height, i.e.: 100,100\n";
         std::cout << "\t" << OPACITY_ARG << "\topacity of watermark (default: " << DEFAULT_OPACITY << ")\n";
+        std::cout << "\t" << VERBOSE_ARG << "\tenables logging\n";
+        std::cout << "\t" << HELP_ARG << "\tshows help\n";
 
         std::cout << "\nSamples:\n";
         std::cout << "\twatermark_cli --" << MARK_ARG << " /home/guest/logo.png --" << SRC_ARG << " /home/guest/mountains.png --"
@@ -237,6 +241,7 @@ try
     watermark::Size mark_size{};
     watermark::Layout layout = to_layout(DEFAULT_LAYOUT);
     watermark::Opacity opacity{DEFAULT_OPACITY};
+    bool verbose{false};
 
     while ((option_id = getopt_long(argc, argv, short_options,
                                     long_options, &option_index)) != -1)
@@ -305,6 +310,11 @@ try
         {
             opacity = std::stof(optarg);
         }
+
+        if (option_name == VERBOSE_ARG)
+        {
+            verbose = true;
+        }
     }
 
     if (mark_file.empty())
@@ -344,14 +354,17 @@ try
 
             output_file = create_out_file(image, output_dir);
 
-            std::cout << "Mark file: " << mark_file << std::endl;
-            std::cout << "Source file: " << image << std::endl;
-            std::cout << "Output file: " << output_file << std::endl;
-            std::cout << "Source dir: " << source_dir << std::endl;
-            std::cout << "Output dir: " << output_dir << std::endl;
-            std::cout << "Layout: " << static_cast<int>(layout) << std::endl;
-            std::cout << "Opacity: " << opacity << std::endl;
-            std::cout << "Size: " << mark_size.width() << "x" << mark_size.height() << std::endl;
+            if (verbose)
+            {
+                std::cout << "Mark file: " << mark_file << std::endl;
+                std::cout << "Source file: " << image << std::endl;
+                std::cout << "Output file: " << output_file << std::endl;
+                std::cout << "Source dir: " << source_dir << std::endl;
+                std::cout << "Output dir: " << output_dir << std::endl;
+                std::cout << "Layout: " << static_cast<int>(layout) << std::endl;
+                std::cout << "Size: " << mark_size.width() << "x" << mark_size.height() << std::endl;
+                std::cout << "Opacity: " << opacity << std::endl;
+            }
 
             auto result = mark.apply_to(img, layout, mark_size, opacity);
             result.save(output_file);
@@ -366,18 +379,21 @@ try
             output_file = create_out_file(source_file, output_dir);
         }
 
-        std::cout << "Mark file: " << mark_file << std::endl;
-        std::cout << "Source file: " << source_file << std::endl;
-        std::cout << "Output file: " << output_file << std::endl;
-        std::cout << "Source dir: " << source_dir << std::endl;
-        std::cout << "Output dir: " << output_dir << std::endl;
-        std::cout << "Layout: " << static_cast<int>(layout) << std::endl;
-        std::cout << "Opacity: " << opacity << std::endl;
-        std::cout << "Size: " << mark_size.width() << "x" << mark_size.height() << std::endl;
+        if (verbose)
+        {
+            std::cout << "Mark file: " << mark_file << std::endl;
+            std::cout << "Source file: " << source_file << std::endl;
+            std::cout << "Output file: " << output_file << std::endl;
+            std::cout << "Source dir: " << source_dir << std::endl;
+            std::cout << "Output dir: " << output_dir << std::endl;
+            std::cout << "Layout: " << static_cast<int>(layout) << std::endl;
+            std::cout << "Opacity: " << opacity << std::endl;
+            std::cout << "Size: " << mark_size.width() << "x" << mark_size.height() << std::endl;
 
-        watermark::Watermark mark{std::move(logo)};
-        auto result = mark.apply_to(img, layout, mark_size, opacity);
-        result.save(output_file);
+            watermark::Watermark mark{std::move(logo)};
+            auto result = mark.apply_to(img, layout, mark_size, opacity);
+            result.save(output_file);
+        }
     }
 
     return EXIT_SUCCESS;
