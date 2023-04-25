@@ -15,8 +15,8 @@
 namespace
 {
     // Version
-    const uint8_t MAJOR_VERSION{0};
-    const uint8_t MINOR_VERSION{1};
+    const uint8_t MAJOR_VERSION{0U};
+    const uint8_t MINOR_VERSION{1U};
 
     std::string app_version()
     {
@@ -357,10 +357,22 @@ try
             if (verbose)
             {
                 std::cout << "Mark file: " << mark_file << std::endl;
-                std::cout << "Source file: " << image << std::endl;
-                std::cout << "Output file: " << output_file << std::endl;
-                std::cout << "Source dir: " << source_dir << std::endl;
-                std::cout << "Output dir: " << output_dir << std::endl;
+                if (!image.empty())
+                {
+                    std::cout << "Source file: " << image << std::endl;
+                }
+                if (!output_file.empty())
+                {
+                    std::cout << "Output file: " << output_file << std::endl;
+                }
+                if (!source_dir.empty())
+                {
+                    std::cout << "Source dir: " << source_dir << std::endl;
+                }
+                if (!output_dir.empty())
+                {
+                    std::cout << "Output dir: " << output_dir << std::endl;
+                }
                 std::cout << "Layout: " << static_cast<int>(layout) << std::endl;
                 std::cout << "Size: " << mark_size.width() << "x" << mark_size.height() << std::endl;
                 std::cout << "Opacity: " << opacity << std::endl;
@@ -372,7 +384,7 @@ try
     }
     else
     {
-        watermark::Image img{source_file};
+        watermark::Image image{source_file};
 
         if (output_file.empty())
         {
@@ -382,16 +394,28 @@ try
         if (verbose)
         {
             std::cout << "Mark file: " << mark_file << std::endl;
-            std::cout << "Source file: " << source_file << std::endl;
-            std::cout << "Output file: " << output_file << std::endl;
-            std::cout << "Source dir: " << source_dir << std::endl;
-            std::cout << "Output dir: " << output_dir << std::endl;
+            if (!source_file.empty())
+            {
+                std::cout << "Source file: " << source_file << std::endl;
+            }
+            if (!output_file.empty())
+            {
+                std::cout << "Output file: " << output_file << std::endl;
+            }
+            if (!source_dir.empty())
+            {
+                std::cout << "Source dir: " << source_dir << std::endl;
+            }
+            if (!output_dir.empty())
+            {
+                std::cout << "Output dir: " << output_dir << std::endl;
+            }
             std::cout << "Layout: " << static_cast<int>(layout) << std::endl;
-            std::cout << "Opacity: " << opacity << std::endl;
             std::cout << "Size: " << mark_size.width() << "x" << mark_size.height() << std::endl;
+            std::cout << "Opacity: " << opacity << std::endl;
 
             watermark::Watermark mark{std::move(logo)};
-            auto result = mark.apply_to(img, layout, mark_size, opacity);
+            auto result = mark.apply_to(image, layout, mark_size, opacity);
             result.save(output_file);
         }
     }
