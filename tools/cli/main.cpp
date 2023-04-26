@@ -67,6 +67,73 @@ namespace
     const std::string DEFAULT_LAYOUT{BOTTOM_RIGHT};
     const watermark::Opacity DEFAULT_OPACITY{0.5f};
 
+    class Log_stream
+    {
+    public:
+        explicit Log_stream(std::ostream &stream, bool silent) : m_stream{stream}, m_silent{silent} {}
+
+        Log_stream() = delete;
+        Log_stream(const Log_stream &) = delete;
+        Log_stream &operator=(const Log_stream &) = delete;
+        Log_stream(Log_stream &&) = default;
+        Log_stream &operator=(Log_stream &&) = default;
+
+        template <typename T>
+        const Log_stream &print(T &&value) const
+        {
+            if (!m_silent)
+            {
+                m_stream << std::forward<T>(value);
+            }
+            return *this;
+        }
+
+        ~Log_stream() noexcept
+        {
+            m_stream << std::endl;
+        }
+
+    private:
+        std::ostream &m_stream;
+        bool m_silent{false};
+    };
+
+    class Logger
+    {
+    public:
+        Log_stream info() noexcept
+        {
+            Log_stream stream{std::cout, !m_verbose};
+            stream.print("INFO\t");
+
+            return stream;
+        }
+
+        Log_stream error() noexcept
+        {
+            Log_stream stream{std::cerr, false};
+            stream.print("ERROR\t");
+
+            return stream;
+        }
+
+        void set_verbose(bool verbose)
+        {
+            m_verbose = verbose;
+        }
+
+    private:
+        bool m_verbose{false};
+    };
+
+    template <typename T>
+    const Log_stream &operator<<(const Log_stream &stream, T &&value)
+    {
+        stream.print(std::forward<T>(value));
+
+        return stream;
+    }
+
     void print_help()
     {
         std::cout << "watermark cli, " << app_version() << "\n";
@@ -167,7 +234,8 @@ namespace
 
         for (const auto &entry : std::filesystem::directory_iterator(dir_path))
         {
-            std::cout << entry << std::endl;
+            // TODO: how to print?
+            // std::cout << entry << std::endl;
             const auto &path = entry.path();
             if (watermark::Image::is_image(path))
             {
@@ -229,6 +297,8 @@ namespace
 int main(int argc, char *argv[])
 try
 {
+    Logger logger;
+
     int option_index = 0;
     int option_id = 0;
     opterr = 0;
@@ -241,7 +311,6 @@ try
     watermark::Size mark_size{};
     watermark::Layout layout = to_layout(DEFAULT_LAYOUT);
     watermark::Opacity opacity{DEFAULT_OPACITY};
-    bool verbose{false};
 
     while ((option_id = getopt_long(argc, argv, short_options,
                                     long_options, &option_index)) != -1)
@@ -313,7 +382,7 @@ try
 
         if (option_name == VERBOSE_ARG)
         {
-            verbose = true;
+            logger.set_verbose(true);
         }
     }
 
@@ -354,29 +423,26 @@ try
 
             output_file = create_out_file(image, output_dir);
 
-            if (verbose)
+            logger.info() << "Mark file: " << mark_file;
+            if (!image.empty())
             {
-                std::cout << "Mark file: " << mark_file << std::endl;
-                if (!image.empty())
-                {
-                    std::cout << "Source file: " << image << std::endl;
-                }
-                if (!output_file.empty())
-                {
-                    std::cout << "Output file: " << output_file << std::endl;
-                }
-                if (!source_dir.empty())
-                {
-                    std::cout << "Source dir: " << source_dir << std::endl;
-                }
-                if (!output_dir.empty())
-                {
-                    std::cout << "Output dir: " << output_dir << std::endl;
-                }
-                std::cout << "Layout: " << static_cast<int>(layout) << std::endl;
-                std::cout << "Size: " << mark_size.width() << "x" << mark_size.height() << std::endl;
-                std::cout << "Opacity: " << opacity << std::endl;
+                logger.info() << "Source file: " << image;
             }
+            if (!output_file.empty())
+            {
+                logger.info() << "Output file: " << output_file;
+            }
+            if (!source_dir.empty())
+            {
+                logger.info() << "Source dir: " << source_dir;
+            }
+            if (!output_dir.empty())
+            {
+                logger.info() << "Output dir: " << output_dir;
+            }
+            logger.info() << "Layout: " << static_cast<int>(layout);
+            logger.info() << "Size: " << mark_size.width() << "x" << mark_size.height();
+            logger.info() << "Opacity: " << opacity;
 
             auto result = mark.apply_to(img, layout, mark_size, opacity);
             result.save(output_file);
@@ -391,44 +457,41 @@ try
             output_file = create_out_file(source_file, output_dir);
         }
 
-        if (verbose)
+        logger.info() << "Mark file: " << mark_file;
+        if (!source_file.empty())
         {
-            std::cout << "Mark file: " << mark_file << std::endl;
-            if (!source_file.empty())
-            {
-                std::cout << "Source file: " << source_file << std::endl;
-            }
-            if (!output_file.empty())
-            {
-                std::cout << "Output file: " << output_file << std::endl;
-            }
-            if (!source_dir.empty())
-            {
-                std::cout << "Source dir: " << source_dir << std::endl;
-            }
-            if (!output_dir.empty())
-            {
-                std::cout << "Output dir: " << output_dir << std::endl;
-            }
-            std::cout << "Layout: " << static_cast<int>(layout) << std::endl;
-            std::cout << "Size: " << mark_size.width() << "x" << mark_size.height() << std::endl;
-            std::cout << "Opacity: " << opacity << std::endl;
-
-            watermark::Watermark mark{std::move(logo)};
-            auto result = mark.apply_to(image, layout, mark_size, opacity);
-            result.save(output_file);
+            logger.info() << "Source file: " << source_file;
         }
+        if (!output_file.empty())
+        {
+            logger.info() << "Output file: " << output_file;
+        }
+        if (!source_dir.empty())
+        {
+            logger.info() << "Source dir: " << source_dir;
+        }
+        if (!output_dir.empty())
+        {
+            logger.info() << "Output dir: " << output_dir;
+        }
+        logger.info() << "Layout: " << static_cast<int>(layout);
+        logger.info() << "Size: " << mark_size.width() << "x" << mark_size.height();
+        logger.info() << "Opacity: " << opacity;
+
+        watermark::Watermark mark{std::move(logo)};
+        auto result = mark.apply_to(image, layout, mark_size, opacity);
+        result.save(output_file);
     }
 
     return EXIT_SUCCESS;
 }
 catch (const watermark::Exception &e)
 {
-    std::cerr << "Watermarking failed: " << e.what() << std::endl;
+    Logger{}.error() << "Watermarking failed: " << e.what();
     return EXIT_FAILURE;
 }
 catch (const std::exception &e)
 {
-    std::cerr << "Execution failed: " << e.what() << std::endl;
+    Logger{}.error() << "Execution failed: " << e.what();
     return EXIT_FAILURE;
 }
