@@ -171,25 +171,41 @@ namespace
                   << OPACITY_ARG << " 0.8\n";
     }
 
-    void validate_image_file(const std::string &file_path)
+    std::filesystem::path get_fs_path(const std::string &file_path)
     {
         if (file_path.empty())
         {
             throw std::invalid_argument(std::string("Empty file path"));
         }
 
-        std::filesystem::path mark_path{file_path};
-        if (!std::filesystem::exists(mark_path))
+        std::filesystem::path fs_path{file_path};
+        if (!std::filesystem::exists(fs_path))
         {
-            throw std::invalid_argument(std::string("File does not exist: ").append(file_path));
+            throw std::invalid_argument(std::string("File/directory does not exist: ").append(file_path));
         }
-        if (!std::filesystem::is_regular_file(mark_path))
+
+        return fs_path;
+    }
+
+    void validate_image_file(const std::string &file_path)
+    {
+        auto fs_path = get_fs_path(file_path);
+        if (!std::filesystem::is_regular_file(fs_path))
         {
             throw std::invalid_argument(std::string("File is not regular ").append(file_path));
         }
-        if (!watermark::Image::is_image(file_path))
+        if (!watermark::Image::is_image(fs_path))
         {
             throw std::invalid_argument(std::string("File is not an image: ").append(file_path));
+        }
+    }
+
+    void validate_dir(const std::string& dir_path)
+    {
+        auto fs_path = get_fs_path(dir_path);
+        if (!std::filesystem::is_directory(fs_path))
+        {
+            throw std::invalid_argument(std::string("Not a directory: ").append(dir_path));
         }
     }
 
@@ -363,11 +379,13 @@ try
         if (option_name == SRC_DIR_ARG)
         {
             source_dir = optarg;
+            validate_dir(source_dir);
         }
 
         if (option_name == OUT_DIR_ARG)
         {
             output_dir = optarg;
+            validate_dir(source_dir);
         }
 
         if (option_name == LAYOUT_ARG)
