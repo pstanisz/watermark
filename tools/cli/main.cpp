@@ -90,7 +90,10 @@ namespace
 
         ~Log_stream() noexcept
         {
-            m_stream << std::endl;
+            if (!m_silent)
+            {
+                m_stream << std::endl;
+            }
         }
 
     private:
