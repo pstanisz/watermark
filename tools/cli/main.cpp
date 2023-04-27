@@ -190,6 +190,22 @@ namespace
         return fs_path;
     }
 
+    std::filesystem::path get_dir_path(const std::string& dir_path)
+    {
+        auto fs_path = get_fs_path(dir_path);
+        if (!std::filesystem::is_directory(fs_path))
+        {
+            throw std::invalid_argument(std::string("Not a directory: ").append(dir_path));
+        }
+
+        return fs_path;
+    }
+
+    void validate_dir(const std::string& dir_path)
+    {
+        get_dir_path(dir_path);
+    }
+
     void validate_image_file(const std::string &file_path)
     {
         auto fs_path = get_fs_path(file_path);
@@ -200,15 +216,6 @@ namespace
         if (!watermark::Image::is_image(fs_path))
         {
             throw std::invalid_argument(std::string("File is not an image: ").append(file_path));
-        }
-    }
-
-    void validate_dir(const std::string& dir_path)
-    {
-        auto fs_path = get_fs_path(dir_path);
-        if (!std::filesystem::is_directory(fs_path))
-        {
-            throw std::invalid_argument(std::string("Not a directory: ").append(dir_path));
         }
     }
 
@@ -241,15 +248,7 @@ namespace
     {
         std::vector<std::string> images;
 
-        std::filesystem::path dir_path{dir};
-        if (!std::filesystem::exists(dir_path))
-        {
-            throw std::invalid_argument(std::string("Directory does not exist: ").append(dir_path));
-        }
-        if (!std::filesystem::is_directory(dir_path))
-        {
-            throw std::invalid_argument(std::string("Not a directory: ").append(dir_path));
-        }
+        auto dir_path = get_dir_path(dir);
 
         for (const auto &entry : std::filesystem::directory_iterator(dir_path))
         {
@@ -388,7 +387,7 @@ try
         if (option_name == OUT_DIR_ARG)
         {
             output_dir = optarg;
-            validate_dir(source_dir);
+            validate_dir(output_dir);
         }
 
         if (option_name == LAYOUT_ARG)
