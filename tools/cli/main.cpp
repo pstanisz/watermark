@@ -104,7 +104,23 @@ namespace
     class Logger
     {
     public:
-        Log_stream info() noexcept
+        static Logger& instance()
+        {
+            static Logger m_instance;
+
+            return m_instance;
+        }
+
+        static Log_stream info() {
+            return Logger::instance().info_stream();
+        }
+
+        static Log_stream error() {
+            return Logger::instance().error_stream();
+        }
+
+    public:
+        Log_stream info_stream() noexcept
         {
             Log_stream stream{std::cout, !m_verbose};
             stream.print("INFO\t");
@@ -112,7 +128,7 @@ namespace
             return stream;
         }
 
-        Log_stream error() noexcept
+        Log_stream error_stream() noexcept
         {
             Log_stream stream{std::cerr, false};
             stream.print("ERROR\t");
@@ -507,11 +523,11 @@ try
 }
 catch (const watermark::Exception &e)
 {
-    Logger{}.error() << "Watermarking failed: " << e.what();
+    Logger::error() << "Watermarking failed: " << e.what();
     return EXIT_FAILURE;
 }
 catch (const std::exception &e)
 {
-    Logger{}.error() << "Execution failed: " << e.what();
+    Logger::error() << "Execution failed: " << e.what();
     return EXIT_FAILURE;
 }
