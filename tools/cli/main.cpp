@@ -104,18 +104,20 @@ namespace
     class Logger
     {
     public:
-        static Logger& instance()
+        static Logger &instance()
         {
             static Logger m_instance;
 
             return m_instance;
         }
 
-        static Log_stream info() {
+        static Log_stream info()
+        {
             return Logger::instance().info_stream();
         }
 
-        static Log_stream error() {
+        static Log_stream error()
+        {
             return Logger::instance().error_stream();
         }
 
@@ -151,6 +153,15 @@ namespace
         stream.print(std::forward<T>(value));
 
         return stream;
+    }
+
+    template <typename T>
+    void log_non_empty(const std::string &text, T &&value)
+    {
+        if (!value.empty())
+        {
+            Logger::info() << text << value;
+        }
     }
 
     void print_help()
@@ -206,7 +217,7 @@ namespace
         return fs_path;
     }
 
-    std::filesystem::path get_dir_path(const std::string& dir_path)
+    std::filesystem::path get_dir_path(const std::string &dir_path)
     {
         auto fs_path = get_fs_path(dir_path);
         if (!std::filesystem::is_directory(fs_path))
@@ -217,7 +228,7 @@ namespace
         return fs_path;
     }
 
-    void validate_dir(const std::string& dir_path)
+    void validate_dir(const std::string &dir_path)
     {
         get_dir_path(dir_path);
     }
@@ -459,23 +470,13 @@ try
 
             output_file = create_out_file(image, output_dir);
 
-            logger.info() << "Mark file: " << mark_file;
-            if (!image.empty())
-            {
-                logger.info() << "Source file: " << image;
-            }
-            if (!output_file.empty())
-            {
-                logger.info() << "Output file: " << output_file;
-            }
-            if (!source_dir.empty())
-            {
-                logger.info() << "Source dir: " << source_dir;
-            }
-            if (!output_dir.empty())
-            {
-                logger.info() << "Output dir: " << output_dir;
-            }
+            log_non_empty("Mark file: ", mark_file);
+            log_non_empty("Source file: ", image);
+            log_non_empty("Output file: ", output_file);
+            log_non_empty("Source dir: ", source_dir);
+            log_non_empty("Output dir: ", output_dir);
+            log_non_empty("Output file: ", output_file);
+
             logger.info() << "Layout: " << static_cast<int>(layout);
             logger.info() << "Size: " << mark_size.width() << "x" << mark_size.height();
             logger.info() << "Opacity: " << opacity;
@@ -493,23 +494,12 @@ try
             output_file = create_out_file(source_file, output_dir);
         }
 
-        logger.info() << "Mark file: " << mark_file;
-        if (!source_file.empty())
-        {
-            logger.info() << "Source file: " << source_file;
-        }
-        if (!output_file.empty())
-        {
-            logger.info() << "Output file: " << output_file;
-        }
-        if (!source_dir.empty())
-        {
-            logger.info() << "Source dir: " << source_dir;
-        }
-        if (!output_dir.empty())
-        {
-            logger.info() << "Output dir: " << output_dir;
-        }
+        log_non_empty("Mark file: ", mark_file);
+        log_non_empty("Source file: ", source_file);
+        log_non_empty("Output file: ", output_file);
+        log_non_empty("Source dir: ", source_dir);
+        log_non_empty("Output dir: ", output_dir);
+        log_non_empty("Output file: ", output_file);
         logger.info() << "Layout: " << static_cast<int>(layout);
         logger.info() << "Size: " << mark_size.width() << "x" << mark_size.height();
         logger.info() << "Opacity: " << opacity;
