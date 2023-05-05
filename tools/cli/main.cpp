@@ -25,6 +25,9 @@ namespace
         return ss.str();
     }
 
+    // App name
+    const char APP_NAME[] = "watermark_cli";
+
     // Arguments
     const char MARK_ARG[] = "mark";
     const char MARK_SIZE_ARG[] = "size";
@@ -138,9 +141,9 @@ namespace
             return stream;
         }
 
-        void set_verbose(bool verbose)
+        static void set_verbose(bool verbose)
         {
-            m_verbose = verbose;
+            Logger::instance().m_verbose = verbose;
         }
 
     private:
@@ -166,16 +169,16 @@ namespace
 
     void print_help()
     {
-        std::cout << "watermark cli, " << app_version() << "\n";
+        std::cout << APP_NAME << ", " << app_version() << "\n";
         std::cout << "\nApplication takes an input watermark image and applies the watermark for the source image or images which are found in the directory specified by the user.\n";
 
         std::cout << "\nUsage 1:\n";
-        std::cout << "\twatermark_cli --" << MARK_ARG << " <mark> --" << SRC_ARG << " <image> --"
+        std::cout << "\t" << APP_NAME << " --" << MARK_ARG << " <mark> --" << SRC_ARG << " <image> --"
                   << OUT_ARG << " <output_image> --" << LAYOUT_ARG << " <layout> --" << MARK_SIZE_ARG << " <mark_size> --"
                   << OPACITY_ARG << " <opacity>\n";
 
         std::cout << "\nUsage 2:\n";
-        std::cout << "\twatermark_cli --" << MARK_ARG << " <mark> --" << SRC_DIR_ARG << " <dir_with_images> --"
+        std::cout << "\t" << APP_NAME << " --" << MARK_ARG << " <mark> --" << SRC_DIR_ARG << " <dir_with_images> --"
                   << OUT_DIR_ARG << " <output_dir> --" << LAYOUT_ARG << " <layout> --" << MARK_SIZE_ARG << " <mark_size> --"
                   << OPACITY_ARG << " <opacity>\n";
 
@@ -196,7 +199,7 @@ namespace
         std::cout << "\t" << HELP_ARG << "\tshows help\n";
 
         std::cout << "\nSamples:\n";
-        std::cout << "\twatermark_cli --" << MARK_ARG << " /home/guest/logo.png --" << SRC_ARG << " /home/guest/mountains.png --"
+        std::cout << "\t" << APP_NAME << " --" << MARK_ARG << " /home/guest/logo.png --" << SRC_ARG << " /home/guest/mountains.png --"
                   << OUT_ARG << " /home/guest/mountains_marked.png --" << LAYOUT_ARG << " center --" << MARK_SIZE_ARG << " 100,100 --"
                   << OPACITY_ARG << " 0.8\n";
     }
@@ -342,8 +345,6 @@ namespace
 int main(int argc, char *argv[])
 try
 {
-    Logger logger;
-
     int option_index = 0;
     int option_id = 0;
     opterr = 0;
@@ -429,7 +430,7 @@ try
 
         if (option_name == VERBOSE_ARG)
         {
-            logger.set_verbose(true);
+            Logger::set_verbose(true);
         }
     }
 
@@ -477,9 +478,9 @@ try
             log_non_empty("Output dir: ", output_dir);
             log_non_empty("Output file: ", output_file);
 
-            logger.info() << "Layout: " << static_cast<int>(layout);
-            logger.info() << "Size: " << mark_size.width() << "x" << mark_size.height();
-            logger.info() << "Opacity: " << opacity;
+            Logger::info() << "Layout: " << static_cast<int>(layout);
+            Logger::info() << "Size: " << mark_size.width() << "x" << mark_size.height();
+            Logger::info() << "Opacity: " << opacity;
 
             auto result = mark.apply_to(img, layout, mark_size, opacity);
             result.save(output_file);
@@ -500,9 +501,9 @@ try
         log_non_empty("Source dir: ", source_dir);
         log_non_empty("Output dir: ", output_dir);
         log_non_empty("Output file: ", output_file);
-        logger.info() << "Layout: " << static_cast<int>(layout);
-        logger.info() << "Size: " << mark_size.width() << "x" << mark_size.height();
-        logger.info() << "Opacity: " << opacity;
+        Logger::info() << "Layout: " << static_cast<int>(layout);
+        Logger::info() << "Size: " << mark_size.width() << "x" << mark_size.height();
+        Logger::info() << "Opacity: " << opacity;
 
         watermark::Watermark mark{std::move(logo)};
         auto result = mark.apply_to(image, layout, mark_size, opacity);
