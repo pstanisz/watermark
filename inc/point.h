@@ -11,8 +11,7 @@ namespace watermark
         unsigned int m_x;
         unsigned int m_y;
 
-        bool operator==(const Point &) const = default;
-        bool operator!=(const Point &) const = default;
+        friend auto operator<=>(const Point&, const Point&) = default;
     };
 
 }
