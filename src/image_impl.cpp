@@ -49,6 +49,13 @@ namespace watermark
         cv::resize(m_matrix, m_matrix, {new_size.width(), new_size.height()}, 0.0, 0.0, cv::INTER_AREA);
     }
 
+    void Image_impl::scale(double scale)
+    {
+        assert(!m_matrix.empty());
+
+        cv::resize(m_matrix, m_matrix, cv::Size(), scale, scale, cv::INTER_AREA);
+    }
+
     void Image_impl::save(const std::string &img_path)
     {
         assert(!m_matrix.empty());

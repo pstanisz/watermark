@@ -15,7 +15,6 @@ namespace watermark
         return Image_impl::is_image(file_path);
     }
 
-
     Image::Image(const std::string &img_path) : m_impl{new Image_impl(img_path)}
     {
     }
@@ -62,6 +61,13 @@ namespace watermark
         assert(m_impl != nullptr);
 
         return m_impl->resize(new_size);
+    }
+
+    void Image::scale(double scale)
+    {
+        assert(m_impl != nullptr);
+
+        return m_impl->scale(scale);
     }
 
     void Image::save(const std::string &img_path)

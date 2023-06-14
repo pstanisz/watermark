@@ -25,6 +25,7 @@ namespace watermark
 
         Size size() const noexcept;
         void resize(const Size &new_size);
+        void scale(double scale);
 
         void save(const std::string &img_path);
 

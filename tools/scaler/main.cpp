@@ -29,7 +29,7 @@ namespace
     const char APP_NAME[] = "scaler";
 
     // Arguments
-    const char MAX_SIZE_ARG[] = "max_size";
+    const char SIZE_ARG[] = "size";
     const char SRC_ARG[] = "src";
     const char SRC_DIR_ARG[] = "src_dir";
     const char OUT_ARG[] = "out";
@@ -39,7 +39,7 @@ namespace
     // Options
     static const char *short_options = "h";
     static struct option long_options[] = {
-        {MAX_SIZE_ARG, required_argument, nullptr, 0},
+        {SIZE_ARG, required_argument, nullptr, 0},
         {SRC_ARG, required_argument, nullptr, 0},
         {SRC_DIR_ARG, required_argument, nullptr, 0},
         {OUT_ARG, required_argument, nullptr, 0},
@@ -50,14 +50,14 @@ namespace
     void print_help()
     {
         std::cout << APP_NAME << ", " << app_version() << "\n";
-        std::cout << "\nApplication takes an input image or images and scales so that width and height do not exceed maximum size specified.\n";
+        std::cout << "\nApplication takes an input image or images and scales it so that it fits to the size specified.\n";
 
         std::cout << "\nUsage:\n";
-        std::cout << "\t" << APP_NAME << " --" << MAX_SIZE_ARG << " <max_size> --" << SRC_ARG << " <image> --"
+        std::cout << "\t" << APP_NAME << " --" << SIZE_ARG << " <size> --" << SRC_ARG << " <image> --"
                   << OUT_ARG << " <output_image>\n";
 
         std::cout << "\nArguments:\n";
-        std::cout << "\t" << MAX_SIZE_ARG << "\tmaximum size (mandatory)\n";
+        std::cout << "\t" << SIZE_ARG << "\tmaximum size (mandatory)\n";
         std::cout << "\t" << SRC_ARG << "\tsource image to be scaled (mandatory if " << SRC_DIR_ARG << " is not specified)\n";
         std::cout << "\t" << SRC_DIR_ARG << "\tdirectory with images to be scaled (mandatory if " << SRC_ARG << " is not specified)\n";
         std::cout << "\t" << OUT_ARG << "\toutput file, where scaled image will be saved (default: same as source with _scaled postfix)\n";
@@ -65,7 +65,7 @@ namespace
         std::cout << "\t" << HELP_ARG << "\tshows help\n";
 
         std::cout << "\nSamples:\n";
-        std::cout << "\t" << APP_NAME << " --" << MAX_SIZE_ARG << "  100,100 --" << SRC_ARG << " /home/guest/mountains.png --"
+        std::cout << "\t" << APP_NAME << " --" << SIZE_ARG << "  100,100 --" << SRC_ARG << " /home/guest/mountains.png --"
                   << OUT_ARG << " /home/guest/mountains_marked.png\n";
     }
 
@@ -157,6 +157,24 @@ namespace
         return images;
     }
 
+    double calculate_scaling_factor(const watermark::Size &input, const watermark::Size &max)
+    {
+        double width_scale = 1.0;
+        double height_scale = 1.0;
+
+        if (input.width() > max.width())
+        {
+            width_scale = static_cast<double>(max.width()) / static_cast<double>(input.width());
+        }
+
+        if (input.height() > max.height())
+        {
+            height_scale = static_cast<double>(max.height()) / static_cast<double>(input.height());
+        }
+
+        return (width_scale < height_scale ? width_scale : height_scale);
+    }
+
 }
 
 int main(int argc, char *argv[])
@@ -188,7 +206,7 @@ try
             return EXIT_SUCCESS;
         }
 
-        if (option_name == MAX_SIZE_ARG)
+        if (option_name == SIZE_ARG)
         {
             std::smatch matches;
             const std::regex size_expr("^([0-9]+),([0-9]+)");
@@ -256,8 +274,9 @@ try
             watermark::Image img{image};
             output_file = create_out_file(image, output_dir);
 
-            auto original_size = img.size();
-            img.resize(max_size);
+            auto scaling_factor = calculate_scaling_factor(img.size(), max_size);
+            std::cout << "Scaling factor: " << scaling_factor << std::endl;
+            img.scale(scaling_factor);
             img.save(output_file);
         }
     }
@@ -270,8 +289,9 @@ try
             output_file = create_out_file(source_file, output_dir);
         }
 
-        auto original_size = img.size();
-        img.resize(max_size);
+        auto scaling_factor = calculate_scaling_factor(img.size(), max_size);
+        std::cout << "Scaling factor: " << scaling_factor << std::endl;
+        img.scale(scaling_factor);
         img.save(output_file);
     }
 
@@ -279,13 +299,13 @@ try
 }
 catch (const watermark::Exception &e)
 {
-    //Logger::error() << "Scaling failed: " << e.what();
+    // Logger::error() << "Scaling failed: " << e.what();
     std::cerr << "Scaling failed: " << e.what() << std::endl;
     return EXIT_FAILURE;
 }
 catch (const std::exception &e)
 {
-    //Logger::error() << "Execution failed: " << e.what();
+    // Logger::error() << "Execution failed: " << e.what();
     std::cerr << "Execution failed: " << e.what() << std::endl;
     return EXIT_FAILURE;
 }
