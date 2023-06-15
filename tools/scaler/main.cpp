@@ -4,6 +4,8 @@
 #include <watermark.h>
 #include <exception.h>
 
+#include <logger.h>
+
 #include <iostream>
 #include <string>
 #include <getopt.h>
@@ -47,6 +49,9 @@ namespace
         {HELP_ARG, no_argument, nullptr, 0},
         {0, 0, 0, 0}};
 
+    // Consts
+    const double NO_SCALE = 1.0;
+
     void print_help()
     {
         std::cout << APP_NAME << ", " << app_version() << "\n";
@@ -57,7 +62,7 @@ namespace
                   << OUT_ARG << " <output_image>\n";
 
         std::cout << "\nArguments:\n";
-        std::cout << "\t" << SIZE_ARG << "\tmaximum size (mandatory)\n";
+        std::cout << "\t" << SIZE_ARG << "\tsize to fit to (mandatory)\n";
         std::cout << "\t" << SRC_ARG << "\tsource image to be scaled (mandatory if " << SRC_DIR_ARG << " is not specified)\n";
         std::cout << "\t" << SRC_DIR_ARG << "\tdirectory with images to be scaled (mandatory if " << SRC_ARG << " is not specified)\n";
         std::cout << "\t" << OUT_ARG << "\toutput file, where scaled image will be saved (default: same as source with _scaled postfix)\n";
@@ -180,6 +185,10 @@ namespace
 int main(int argc, char *argv[])
 try
 {
+    using utils::Logger;
+
+    Logger::set_verbose(true);
+
     int option_index = 0;
     int option_id = 0;
     opterr = 0;
@@ -264,6 +273,24 @@ try
     {
         throw std::invalid_argument(std::string("Cannot use both: ").append(OUT_ARG).append(" and ").append(OUT_DIR_ARG));
     }
+    
+    Logger::info() << "Requested size to fit: (" << max_size.width() << ", " << max_size.height() << ")";
+
+    auto scale_fun = [&max_size](const std::string &img_path, const std::string& output_file) {
+        watermark::Image img{img_path};
+        Logger::info() << "Image to scale: " << img_path;
+        Logger::info() << "Image size: " << img.size().width() << " x " << img.size().height();
+
+        auto scaling_factor = calculate_scaling_factor(img.size(), max_size);
+        Logger::info() << "Scaling factor: " << scaling_factor;
+
+        if (scaling_factor != NO_SCALE) {
+            img.scale(scaling_factor);
+        }
+        img.save(output_file);
+        Logger::info() << "Scaled image: " << output_file;
+        Logger::info() << "Scaled size: " << img.size().width() << " x " << img.size().height();
+    };
 
     if (!source_dir.empty())
     {
@@ -271,41 +298,29 @@ try
 
         for (const auto &image : image_paths)
         {
-            watermark::Image img{image};
             output_file = create_out_file(image, output_dir);
-
-            auto scaling_factor = calculate_scaling_factor(img.size(), max_size);
-            std::cout << "Scaling factor: " << scaling_factor << std::endl;
-            img.scale(scaling_factor);
-            img.save(output_file);
+            scale_fun(image, output_file);
         }
     }
     else
     {
-        watermark::Image img{source_file};
-
         if (output_file.empty())
         {
             output_file = create_out_file(source_file, output_dir);
         }
 
-        auto scaling_factor = calculate_scaling_factor(img.size(), max_size);
-        std::cout << "Scaling factor: " << scaling_factor << std::endl;
-        img.scale(scaling_factor);
-        img.save(output_file);
+        scale_fun(source_file, output_file);
     }
 
     return EXIT_SUCCESS;
 }
 catch (const watermark::Exception &e)
 {
-    // Logger::error() << "Scaling failed: " << e.what();
-    std::cerr << "Scaling failed: " << e.what() << std::endl;
+    utils::Logger::error() << "Scaling failed: " << e.what();
     return EXIT_FAILURE;
 }
 catch (const std::exception &e)
 {
-    // Logger::error() << "Execution failed: " << e.what();
-    std::cerr << "Execution failed: " << e.what() << std::endl;
+    utils::Logger::error() << "Execution failed: " << e.what();
     return EXIT_FAILURE;
 }

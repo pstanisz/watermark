@@ -12,6 +12,7 @@ target_include_directories(
     ${TARGET_NAME}
     PUBLIC
     ${INC_DIR}
+    ${TOOLS_DIR}/common
 )
 
 target_compile_options(
